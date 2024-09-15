@@ -38,7 +38,7 @@ function createMainWindow(){
     });
 }
 
-function createNewProductWindow(userData) {
+function createWindowEvalu(userData) {
     newProductWindow = new BrowserWindow({
         width: 1400,
         height: 1600,
@@ -48,7 +48,53 @@ function createNewProductWindow(userData) {
         }
     });
     newProductWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'iu/principal.html'),
+        pathname: path.join(__dirname, 'iu/principal_evalu.html'),
+        protocol: 'file',
+        slashes: true,
+    }));
+    newProductWindow.setMenuBarVisibility(false);
+    newProductWindow.webContents.on('did-finish-load', () => {
+        newProductWindow.webContents.send('check-credentials', userData);
+    });
+    newProductWindow.on('closed', () => {
+        newProductWindow = null;
+    });
+}
+
+function createWindowCoordi(userData) {
+    newProductWindow = new BrowserWindow({
+        width: 1400,
+        height: 1600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    newProductWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/principal_coordi.html'),
+        protocol: 'file',
+        slashes: true,
+    }));
+    newProductWindow.setMenuBarVisibility(false);
+    newProductWindow.webContents.on('did-finish-load', () => {
+        newProductWindow.webContents.send('check-credentials', userData);
+    });
+    newProductWindow.on('closed', () => {
+        newProductWindow = null;
+    });
+}
+
+function createWindowAdmin(userData) {
+    newProductWindow = new BrowserWindow({
+        width: 1400,
+        height: 1600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    newProductWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/principal_Admi.html'),
         protocol: 'file',
         slashes: true,
     }));
@@ -72,14 +118,28 @@ ipcMain.on('check-credentials', async (event, confirmUser) => {
     try {
         const userData = await database.checkCredentials(user, password);
         if (userData) {
-            if (mainWindow) {
-                mainWindow.close();
+            const cargo = userData.Puesto;
+            if(cargo=="Administrador"){
+                if (mainWindow) {
+                    mainWindow.close();
+                }
+                createWindowAdmin(userData);
             }
-            createNewProductWindow(userData);
+            if(cargo=="Coordinador"){
+                if (mainWindow) {
+                    mainWindow.close();
+                }
+                createWindowCoordi(userData);
+            }
+            if(cargo=="Evaluador"){
+                if (mainWindow) {
+                    mainWindow.close();
+                }
+                createWindowEvalu(userData);
+            }
         } else {
             console.error('No se encontraron las credenciales:', error.message);
         }
     } catch (error) {
         console.error('Error al verificar las credenciales:', error.message);
     }
-});
