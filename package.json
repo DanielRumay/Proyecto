@@ -1,0 +1,21 @@
+{
+  "name": "proyecto",
+  "version": "1.0.0",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "electron": "^32.1.0",
+    "electron-reload": "^2.0.0-alpha.1",
+    "electron-squirrel-startup": "^1.0.1",
+    "electron-store": "^10.0.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.11.0",
+    "promise-mysql": "^5.2.0"
+  }
+}
