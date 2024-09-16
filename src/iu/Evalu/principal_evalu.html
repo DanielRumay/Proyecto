@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Electron & Mysql</title>
-    <link rel="stylesheet" href="/bootstrap-5.0.2-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./fondo.css">
+    <link rel="stylesheet" href="./bootstrap-5.0.2-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./evalu.css">
 </head>
 
 <body class="fondo">
@@ -29,21 +29,37 @@
         </div>
 
     </nav>
-    <div class="row">
-        <div class="fondo">
-            <div class="container is-fluid" id="home">
-                <blockquote class="blockquote">
-                    <br>
-                    <p>
-                        <button type="submit" id="btnLogin" class="botton button is-info is-rounded">Cerrar Sesion</button>
-                    </p>
-                    <br>
-                    <h2 id="usuario"></h2>
-                    <h2>Coordinador</h2>
-                </blockquote>
+    <div class="container">
+        <div class="row">
+            <div class="fondo">
+                <div class="container is-fluid" id="home">
+                    <blockquote class="blockquote">
+                        <br>
+                        <div style="text-align: right;">
+                            <button type="submit" id="btnLogin" class="cerrar button is-info is-rounded">Cerrar Sesion</button>
+                        </div>
+                        <p class="tittle">¡Bienvenid@ a Everywhere Travel!</p>
+                    </blockquote>
+                    <div class="row">
+                        <div class="col-8">
+                            <p class="botton_text">
+                                <button type="submit" id="btnLogin" class="botton button is-info is-rounded">Consultar Prototipo</button>
+                            </p>
+                            <p class="img_text">
+                                <img src="./img/pixelcut-export__3_-removebg-preview.ico" alt="Logo" width="160"
+                                    height="110" class="icon d-inline-block align-text-top">
+                            </p>
+                        </div>
+                        <div class="col-4">
+                            <div class="img">
+                                <img src="./img/pixelcut-export.ico" width="275" height="275" class="rounded"
+                                    alt="Logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
     <script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
     <script>
@@ -53,10 +69,8 @@
         const products = document.querySelector('#home');
 
         ipcRenderer.on('check-credentials', (e, userData) => {
-            const usuarioElement = document.querySelector('#usuario');
             const cargoElement = document.querySelector('#cargo');
 
-            usuarioElement.textContent = `Bienvenido Usuario ${userData.NombreUsu}`;
             cargoElement.textContent = userData.Puesto;
             const btns = document.querySelectorAll('#btnLogin');
             btns.forEach(btn => {

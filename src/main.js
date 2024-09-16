@@ -10,6 +10,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 let mainWindow
+let errorWindow
 let newProductWindow
 
 app.on('ready', () => {
@@ -38,6 +39,28 @@ function createMainWindow(){
     });
 }
 
+function createErrorWindow(){
+    errorWindow = new BrowserWindow({
+        width: 1050,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    errorWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/error_404.html'),
+        protocol: 'file',
+        slashes: true,
+    }))
+
+    errorWindow.setMenuBarVisibility(false);
+
+    errorWindow.on('closed', () => {
+        errorWindow = null;
+    });
+}
+
 function createWindowEvalu(userData) {
     newProductWindow = new BrowserWindow({
         width: 1400,
@@ -48,7 +71,7 @@ function createWindowEvalu(userData) {
         }
     });
     newProductWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'iu/principal_evalu.html'),
+        pathname: path.join(__dirname, 'iu/Evalu/principal_evalu.html'),
         protocol: 'file',
         slashes: true,
     }));
@@ -71,7 +94,7 @@ function createWindowCoordi(userData) {
         }
     });
     newProductWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'iu/principal_coordi.html'),
+        pathname: path.join(__dirname, 'iu/Coordi/principal_coordi.html'),
         protocol: 'file',
         slashes: true,
     }));
@@ -94,7 +117,7 @@ function createWindowAdmin(userData) {
         }
     });
     newProductWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'iu/principal_Admi.html'),
+        pathname: path.join(__dirname, 'iu/Admin/principal_Admi.html'),
         protocol: 'file',
         slashes: true,
     }));
@@ -109,6 +132,10 @@ function createWindowAdmin(userData) {
 
 ipcMain.on('close', (e)  => {
     newProductWindow.close();
+    createMainWindow();
+});
+ipcMain.on('close_error', (e)  => {
+    errorWindow.close();
     createMainWindow();
 });
 
@@ -138,8 +165,15 @@ ipcMain.on('check-credentials', async (event, confirmUser) => {
                 createWindowEvalu(userData);
             }
         } else {
-            console.error('No se encontraron las credenciales:', error.message);
+            if (mainWindow) {
+                mainWindow.close();
+            }
+            createErrorWindow();
         }
     } catch (error) {
-        console.error('Error al verificar las credenciales:', error.message);
+        if (mainWindow) {
+            mainWindow.close();
+        }
+        createErrorWindow();
     }
+});

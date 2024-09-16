@@ -1,0 +1,49 @@
+.fondo{
+    background-color: rgb(193, 190, 190);
+}
+
+.navbar{
+    background-color: white;
+    color: black;
+}
+
+.text{
+    padding-left: 15px;
+    font-size: 25px;
+}
+.img{
+    padding-top: 125px;
+}
+.icon{
+    padding-left: 20px;
+}
+.cerrar{
+    font-size: 20px;
+    padding-bottom: 5px;
+    color: rgb(255, 255, 255);
+    border-color:rgb(0, 0, 0);
+    background: rgb(0, 0, 0);
+    border-radius: 25px;
+}
+.tittle{
+    padding-top: 50px;
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+}
+.botton_text{
+    padding-top: 80px;
+    padding-left: 180px;
+
+}
+.img_text{
+    padding-left: 220px;
+}
+.botton{
+    font-size: 30px;
+    padding-bottom: 9px;
+    color: rgb(255, 255, 255);
+    border-color:rgb(15, 42, 133);
+    background: rgb(15, 42, 133);
+    border-radius: 30px;
+}

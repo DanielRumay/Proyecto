@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="./bootstrap-5.0.2-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./fondo.css">
+</head>
+
+<body class="fondo">
+    <div>
+        <div class="img2">
+            <img src="./img/pixelcut-export__1_-removebg-preview.ico" width="180" height="110" class="rounded"
+                alt="Logo">
+        </div>
+        <div class="main-container">
+            <div>
+                <h2 class="hero-body">Los datos ingresados no son válidos<br><br>o no cumplen el formato</h2>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <form>
+                <button type="submit" class="botton2 btn" id="volver">volver</button>
+            </form>
+        </div>
+    </div>
+    <script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+    <script>
+        const { ipcRenderer } = require('electron');
+        const btns = document.querySelectorAll('#volver');
+        btns.forEach(btn => {
+            btn.addEventListener('click', e => {
+                ipcRenderer.send('close_error');
+            })
+        });
+    </script>
+</body>
+
+</html>
