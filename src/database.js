@@ -7,7 +7,6 @@ const connection = mysql.createConnection({
     database: 'proyectologisticoo'
 });
 
-// Función para comprobar las credenciales
 function checkCredentials(user, password) {
     return new Promise((resolve, reject) => {
         const query = 'SELECT * FROM usuario WHERE NombreUsu = ? AND Contraseña = ?';
