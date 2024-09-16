@@ -23,17 +23,17 @@
     <div class="fondo_emergente"></div>
     <div>
         <div class="img2">
-            <img src="./img/pixelcut-export__1_-removebg-preview.ico" width="180" height="110" class="rounded"
+            <img src="./img/accept-removebg-preview.ico" width="160" height="160" class="rounded"
                 alt="Logo">
         </div>
         <div class="main-container">
             <div>
-                <h2 class="hero-body">Los datos ingresados no son válidos<br><br>o no cumplen el formato</h2>
+                <h2 class="hero-body">Sesion cerrada con exito<br><br>puede salir de la ventada</h2>
             </div>
         </div>
         <div class="row justify-content-end">
             <form>
-                <button type="submit" class="botton2 btn" id="volver">volver</button>
+                <button type="submit" class="botton2 btn" id="volver">salir</button>
             </form>
         </div>
     </div>
@@ -43,7 +43,7 @@
         const btns = document.querySelectorAll('#volver');
         btns.forEach(btn => {
             btn.addEventListener('click', e => {
-                ipcRenderer.send('close_error');
+                ipcRenderer.send('close_confirmacion');
             })
         });
     </script>

@@ -10,7 +10,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 let mainWindow
-let errorWindow
+let emergenteWindow
 let newProductWindow
 
 app.on('ready', () => {
@@ -40,7 +40,7 @@ function createMainWindow(){
 }
 
 function createErrorWindow(){
-    errorWindow = new BrowserWindow({
+    emergenteWindow = new BrowserWindow({
         width: 1050,
         height: 600,
         webPreferences: {
@@ -48,16 +48,38 @@ function createErrorWindow(){
             contextIsolation: false
         }
     });
-    errorWindow.loadURL(url.format({
+    emergenteWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'iu/error_404.html'),
         protocol: 'file',
         slashes: true,
     }))
 
-    errorWindow.setMenuBarVisibility(false);
+    emergenteWindow.setMenuBarVisibility(false);
 
-    errorWindow.on('closed', () => {
-        errorWindow = null;
+    emergenteWindow.on('closed', () => {
+        emergenteWindow = null;
+    });
+}
+
+function createConfirmWindow(){
+    emergenteWindow = new BrowserWindow({
+        width: 1050,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    emergenteWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/confirmacion.html'),
+        protocol: 'file',
+        slashes: true,
+    }))
+
+    emergenteWindow.setMenuBarVisibility(false);
+
+    emergenteWindow.on('closed', () => {
+        emergenteWindow = null;
     });
 }
 
@@ -132,10 +154,14 @@ function createWindowAdmin(userData) {
 
 ipcMain.on('close', (e)  => {
     newProductWindow.close();
-    createMainWindow();
+    createConfirmWindow();
 });
 ipcMain.on('close_error', (e)  => {
-    errorWindow.close();
+    emergenteWindow.close();
+    createMainWindow();
+});
+ipcMain.on('close_confirmacion', (e)  => {
+    emergenteWindow.close();
     createMainWindow();
 });
 
