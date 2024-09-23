@@ -3,7 +3,7 @@ const mysql = require('mysql');
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'sisope',
+    password: 'admin',
     database: 'proyectologisticoo'
 });
 
@@ -25,4 +25,31 @@ function checkCredentials(user, password) {
     });
 }
 
-module.exports = { checkCredentials };
+function getUsuarios() {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT NombreUsu, CONCAT(Nombre, " ", Apellido) AS NombreCompleto, Puesto, Contraseña, ContraseñaTemp FROM usuario';
+        
+        connection.query(query, (error, results) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(results || []);
+        });
+    });
+}
+
+function eliminarUsuario(nombreUsu){
+    return new Promise((resolve, reject)=>{
+        const query = 'DELETE FROM usuario WHERE NombreUsu = ?';
+        connection.query(query, [nombreUsu], (error,results)=>{
+            if(error){
+                return reject(error);
+            }
+            resolve(results || []);
+        })
+    })
+}
+
+
+module.exports = { checkCredentials, getUsuarios, eliminarUsuario};
+

@@ -43,7 +43,7 @@
         const btns = document.querySelectorAll('#volver');
         btns.forEach(btn => {
             btn.addEventListener('click', e => {
-                ipcRenderer.send('close_confirmacion');
+                ipcRenderer.send('eliminar-usuario');
             })
         });
     </script>

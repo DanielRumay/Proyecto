@@ -12,11 +12,12 @@ if (process.env.NODE_ENV !== 'production') {
 let mainWindow
 let emergenteWindow
 let newProductWindow
+let AdmUserWindow
 
 app.on('ready', () => {
     createMainWindow();
 })
-
+//----------------------FUNCIONES----------------------
 function createMainWindow(){
     mainWindow = new BrowserWindow({
         width: 1400,
@@ -151,7 +152,51 @@ function createWindowAdmin(userData) {
         newProductWindow = null;
     });
 }
+function createAdmUser(userData, user){
+    AdmUserWindow = new BrowserWindow({
+        width: 1400,
+        height: 1600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    AdmUserWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Admin/gestionUsuarios.html'),
+        protocol: 'file',
+        slashes: true,
+    }))
+    AdmUserWindow.setMenuBarVisibility(false);
+    AdmUserWindow.on('closed', () => {
+        AdmUserWindow = null;
+    });
+    AdmUserWindow.webContents.on('did-finish-load', () => {
+        AdmUserWindow.webContents.send('datos-usuarios', userData, user);
+    });
+}
+function EmergenteUser(){
+    emergenteWindow = new BrowserWindow({
+        width: 1050,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
 
+    emergenteWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Admin/confirmacionEU.html'),
+        protocol: 'file',
+        slashes: true,
+    }))
+
+    emergenteWindow.setMenuBarVisibility(false);
+    emergenteWindow.on('closed', () => {
+        emergenteWindow = null;
+    });
+}
+
+//----------------------IPC MAIN----------------------
 ipcMain.on('close', (e)  => {
     newProductWindow.close();
     createConfirmWindow();
@@ -160,10 +205,40 @@ ipcMain.on('close_error', (e)  => {
     emergenteWindow.close();
     createMainWindow();
 });
+ipcMain.on('confirmar-usuario', (e)  => {
+    emergenteWindow.close()
+});
 ipcMain.on('close_confirmacion', (e)  => {
     emergenteWindow.close();
     createMainWindow();
 });
+ipcMain.on('close_funcion', (e, userData)  => {
+    AdmUserWindow.close();
+    createWindowAdmin(userData);
+});
+ipcMain.on('openCU', async (e, user) => {
+    try {
+        const userData = await database.getUsuarios();
+        if (newProductWindow) {
+            newProductWindow.close();
+        }
+        createAdmUser(userData, user);
+    } catch (error) {
+        console.error("Error al obtener usuarios:", error);
+    }
+});
+
+ipcMain.on('eliminar-usuario', async (e, usuario, user)  => {
+    try {
+        EmergenteUser();
+        /*const data = await database.eliminarUsuario(usuario);*/
+        await database.eliminarUsuario(usuario);
+        e.sender.send('usuario-eliminado',usuario);
+    } catch (error) {
+        console.error("Error al eliminar el usuario:", error);
+    }
+});
+
 
 ipcMain.on('check-credentials', async (event, confirmUser) => {
     const { user, password } = confirmUser;
@@ -176,6 +251,7 @@ ipcMain.on('check-credentials', async (event, confirmUser) => {
                 if (mainWindow) {
                     mainWindow.close();
                 }
+                console.log('sesion');
                 createWindowAdmin(userData);
             }
             if(cargo=="Coordinador"){
@@ -203,3 +279,4 @@ ipcMain.on('check-credentials', async (event, confirmUser) => {
         createErrorWindow();
     }
 });
+
