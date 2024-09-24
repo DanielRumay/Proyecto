@@ -12,4 +12,17 @@ ipcRenderer.on('check-credentials', (e, userData) => {
             ipcRenderer.send('close');
         })
     });
+    const btnConsultarProveedor = document.querySelector('#btnConsultarProveedor');
+    btnConsultarProveedor.addEventListener('click', e => {
+        ipcRenderer.send('open-consultar-proveedores', userData);
+    });
+});
+
+ipcRenderer.on('gestion-proveedor', (e, userData) => {
+
+    const btnVolver = document.querySelector('#btnVolver');
+    btnVolver.addEventListener('click', e => {
+        ipcRenderer.send('cerrar-consultar-proveedores', userData);
+    });
+
 });

@@ -13,6 +13,7 @@ let mainWindow
 let emergenteWindow
 let newProductWindow
 let AdmUserWindow
+let ProvWindow
 
 
 app.on('ready', () => {
@@ -177,29 +178,48 @@ function createAdmUser(userData, user){
         AdmUserWindow.webContents.send('datos-usuarios', userData, user);
     });
 }
-function EmergenteUser(usuario){
-    emergenteWindow = new BrowserWindow({
-        width: 1050,
-        height: 600,
+function createCoodUser(user){
+    AdmUserWindow = new BrowserWindow({
+        width: 1400,
+        height: 1600,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
         }
     });
-
-    emergenteWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'iu/Admin/confirmacionEU.html'),
+    AdmUserWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Coordi/consultarProveedores.html'),
         protocol: 'file',
         slashes: true,
     }))
-
-    emergenteWindow.setMenuBarVisibility(false);
-    emergenteWindow.on('closed', () => {
-        emergenteWindow = null;
+    AdmUserWindow.setMenuBarVisibility(false);
+    AdmUserWindow.on('closed', () => {
+        AdmUserWindow = null;
     });
-
-    emergenteWindow.webContents.on('did-finish-load', () => {
-        emergenteWindow.webContents.send('solicitar-confirmacion', usuario);
+    AdmUserWindow.webContents.on('did-finish-load', () => {
+        AdmUserWindow.webContents.send('datos-usuarios', user);
+    });
+}
+function createProvUser(user) {
+    ProvWindow = new BrowserWindow({
+        width: 1400,
+        height: 1600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    ProvWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Coordi/consultarProveedores.html'),
+        protocol: 'file',
+        slashes: true,
+    }));
+    ProvWindow.setMenuBarVisibility(false);
+    ProvWindow.on('closed', () => {
+        ProvWindow = null;
+    });
+    ProvWindow.webContents.on('did-finish-load', () => {
+        ProvWindow.webContents.send('gestion-proveedor', user);
     });
 }
 
@@ -247,6 +267,20 @@ ipcMain.on('confirmar-eliminar-usuario', (e, usuario)  => {
     } catch (error) {
         console.error("Error al eliminar el usuario:", error);
     }
+});
+
+ipcMain.on('open-consultar-proveedores', (event, user) => {
+    if (newProductWindow) {
+        newProductWindow.close();
+    }
+    createProvUser(user);
+});
+
+ipcMain.on('cerrar-consultar-proveedores', (event, user) => {
+    if (ProvWindow) {
+        ProvWindow.close();
+    }
+    createWindowCoordi(user);
 });
 
 ipcMain.on('check-credentials', async (event, confirmUser) => {
