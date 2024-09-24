@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everywhere Travel</title>
+    <link rel="stylesheet" href="../bootstrap-5.0.2-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../coordi.css">
+</head>
+
+<body class="fondo">
+    <nav class="navbar bg-body-tertiary">
+        <div class="container">
+            <div class="row">
+                <div class="navbar">
+                    <img src="../img/pixelcut-export.ico" alt="Logo" width="70" height="40" class="icon d-inline-block align-text-top">
+                    <span class="text navbar-brand mb-0 h1">EVERYWHERE TRAVEL</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="navbar">
+                    <label class="text h1" id="cargo"></label>
+                    <img src="../img/user.ico" alt="Logo" width="60" height="40" class="icon d-inline-block align-text-top">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="fondo">
+                <div class="container is-fluid">
+                    <br>
+                    <div class="row" style="text-align: right; margin-bottom: 20px;">
+                        <div class="col-12 text-right">
+                            <button type="button" id="btnVolver" class="cerrar button is-info is-rounded" onclick="history.back()">Volver</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 mb-1">
+                            <input type="text" class="form-control" id="buscarProveedor" placeholder="Buscar nombre de Proveedor">
+                        </div>
+                        <div class="col-2 mb-2">
+                            <select class="form-select">
+                                <option selected>Filtrar por servicio</option>
+                            </select>
+                        </div>
+                        <div class="col-2 mb-2">
+                            <select class="form-select">
+                                <option selected>Filtrar por precio</option>
+                            </select>
+                        </div>
+                        <div class="col-1 mb-2">
+                            <input type="text" class="form-control" id="buscarProveedorMin" placeholder="min">
+                        </div>
+                        <div class="col-1 mb-2">
+                            <input type="text" class="form-control" id="buscarProveedorMax" placeholder="max">
+                        </div>
+                        <div class="col-2 mb-2">
+                            <select class="form-select">
+                                <option selected>Filtrar por disponibilidad</option>
+                            </select>
+                        </div>
+                        <div class="col-1 mb-2 d-flex align-items-center justify-content-end">
+                            <button type="submit" id="btnBuscar" class="botton">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+                <h2>Proveedores:</h2>
+                <div class="row">
+                    <div class="col-12 mb-1">
+                        <div class="p-3 border border-1 border-dark rounded bg-light">
+                            <h5>Nombre de Proveedor:</h5>
+                            <h6>Contacto:</h6>
+                            <h6>Servicio:</h6>
+                            <h6>Disponibilidad:</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+
+    <script src="../principal_coordi.js"></script>
+</body>
+
+</html>

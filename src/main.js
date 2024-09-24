@@ -287,3 +287,41 @@ ipcMain.on('check-credentials', async (event, confirmUser) => {
         createErrorWindow();
     }
 });
+
+
+//
+
+ipcMain.on('open-consultar-proveedores', (event) => {
+    if (newProductWindow) {
+        newProductWindow.close();
+    }
+    createWindowConsultarProveedores();
+});
+
+function createWindowConsultarProveedores() {
+    newProductWindow = new BrowserWindow({
+        width: 1400,
+        height: 1600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    newProductWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Coordi/consultarProveedores/consultarProveedores.html'),
+        protocol: 'file',
+        slashes: true,
+    }));
+    newProductWindow.setMenuBarVisibility(false);
+    newProductWindow.on('closed', () => {
+        newProductWindow = null;
+    });
+}
+
+
+ipcMain.on('cerrar-consultar-proveedores', (event) => {
+    if (newProductWindow) {
+        newProductWindow.close();
+    }
+    createWindowCoordi(userData);
+});
