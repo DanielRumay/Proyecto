@@ -178,28 +178,6 @@ function createAdmUser(userData, user){
         AdmUserWindow.webContents.send('datos-usuarios', userData, user);
     });
 }
-function createCoodUser(user){
-    AdmUserWindow = new BrowserWindow({
-        width: 1400,
-        height: 1600,
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false
-        }
-    });
-    AdmUserWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'iu/Coordi/consultarProveedores.html'),
-        protocol: 'file',
-        slashes: true,
-    }))
-    AdmUserWindow.setMenuBarVisibility(false);
-    AdmUserWindow.on('closed', () => {
-        AdmUserWindow = null;
-    });
-    AdmUserWindow.webContents.on('did-finish-load', () => {
-        AdmUserWindow.webContents.send('datos-usuarios', user);
-    });
-}
 function createProvUser(user) {
     ProvWindow = new BrowserWindow({
         width: 1400,
