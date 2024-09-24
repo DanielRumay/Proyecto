@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gestionUsuarios</title>
+    <link rel="stylesheet" href="./bootstrap-5.0.2-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./admin.css">
+</head>
+
+<body class="fondo">
+    <nav class="navbar bg-body-tertiary">
+        <div class="container">
+            <div class="row">
+                <div class="navbar">
+                    <img src="./img/pixelcut-export.ico" alt="Logo" width="70" height="40"
+                        class="icon d-inline-block align-text-top">
+                    <span class="text navbar-brand mb-0 h1">EVERYWHERE TRAVEL</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mb-3 row form_t">
+        <div class="col-sm-4">
+            <input id="f-user" type="text" patwwtern="[a-zA-Z]{0,50}" maxlength="50" class="f_Usuarios" name="usuario"
+                placeholder="Busqueda por nombre de usuario">
+        </div>
+        <div class="col-sm-4">
+            <input id="f-puesto" type="text" patwwtern="[a-zA-Z]{0,50}" maxlength="50" class="f_Usuarios" name="usuario"
+                placeholder="Filtrar por puesto">
+        </div>
+        <div class="col-sm-1">
+            <button type="submit" id="Buscar" class="filtro">Buscar</button>
+        </div>
+        <br><br><br>
+        <div class="text1">Usuarios</div>
+        <br>
+        <div class="table-container">
+            <table id="tablaUsuarios">
+                <thead>
+                    <tr>
+                        <th>Nombre de usuario</th>
+                        <th>Nombre completo</th>
+                        <th>Puesto</th>
+                        <th>Contraseña</th>
+                        <th>Contraseña Temporal</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="usuariosBody">
+                </tbody>
+                
+            </table>
+        </div>
+        <div>
+            <button type="submit" id="Salir" class="cerrar button is-info is-rounded">Salir</button>
+        </div>
+    </div>
+    <script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+    <script src="./principal_Admi.js"></script>
+</body>
+</html>

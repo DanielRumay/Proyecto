@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electron & Mysql</title>
+    <title>Iniciar Sesion</title>
     <link rel="stylesheet" href="./bootstrap-5.0.2-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./fondo.css">
 </head>
@@ -65,30 +65,7 @@
     </div>
 
     <script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
-    <script>
-        const { ipcRenderer } = require('electron');
-        const form = document.querySelector('form');
-        form.addEventListener('submit', e => {
-            
-            const userEmpl = document.querySelector('#usuario').value;
-            const passwordEmpl = document.querySelector('#contraseña').value;
-
-            const confirmUser = {
-                user: userEmpl,
-                password: passwordEmpl,
-            };
-
-            ipcRenderer.send('check-credentials', confirmUser);
-            
-            e.preventDefault();
-
-        });
-    </script>
+    <script src="./inicioSecion.js"></script>
 </body>
 
 </html>
-<!--
-<div class="olvd">
-    <a class="navbar-brand" href="#">olvidé mi contraseña</a>
-</div>
--->

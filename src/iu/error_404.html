@@ -38,15 +38,7 @@
         </div>
     </div>
     <script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
-    <script>
-        const { ipcRenderer } = require('electron');
-        const btns = document.querySelectorAll('#volver');
-        btns.forEach(btn => {
-            btn.addEventListener('click', e => {
-                ipcRenderer.send('close_error');
-            })
-        });
-    </script>
+    <script src="./inicioSecion.js"></script>
 </body>
 
 </html>

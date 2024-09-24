@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error</title>
+    <title>Confirmacion</title>
     <link rel="stylesheet" href="./bootstrap-5.0.2-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./fondo.css">
 </head>
@@ -33,20 +33,12 @@
         </div>
         <div class="row justify-content-end">
             <form>
-                <button type="submit" class="botton2 btn" id="volver">salir</button>
+                <button type="submit" class="botton2 btn" id="salir">salir</button>
             </form>
         </div>
     </div>
     <script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
-    <script>
-        const { ipcRenderer } = require('electron');
-        const btns = document.querySelectorAll('#volver');
-        btns.forEach(btn => {
-            btn.addEventListener('click', e => {
-                ipcRenderer.send('close_confirmacion');
-            })
-        });
-    </script>
+    <script src="./inicioSecion.js"></script>
 </body>
 
 </html>
