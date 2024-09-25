@@ -183,34 +183,72 @@ function EmergenteUser(){
             contextIsolation: false
         }
     });
-
     emergenteWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'iu/Admin/confirmacionEU.html'),
         protocol: 'file',
         slashes: true,
     }))
-
     emergenteWindow.setMenuBarVisibility(false);
     emergenteWindow.on('closed', () => {
         emergenteWindow = null;
     });
+    emergenteWindow.webContents.on('did-finish-load', () => {
+        emergenteWindow.webContents.send('solicitar-confirmacion');
+    });
 }
+
+function EmergenteAgregarUsuario(){
+    emergenteWindow = new BrowserWindow({
+        width: 1050,
+        height: 800,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    emergenteWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Admin/formUsuario.html'),
+        protocol: 'file',
+        slashes: true,
+    }))
+    emergenteWindow.setMenuBarVisibility(false);
+    emergenteWindow.on('closed', () => {
+        emergenteWindow = null;
+    });
+    emergenteWindow.webContents.on('did-finish-load', () => {
+        emergenteWindow.webContents.send('guardar-usuario');
+    });
+}
+
 
 //----------------------IPC MAIN----------------------
 ipcMain.on('close', (e)  => {
     newProductWindow.close();
     createConfirmWindow();
 });
+ipcMain.on('cerrarsecion', (e)  => {
+    emergenteWindow.close();
+    createMainWindow();
+});
+ipcMain.on('Mensaje',(e)=>{
+    console.log('Hola');
+})
+
+ipcMain.on('form-user',(e, )=>{
+    EmergenteAgregarUsuario();
+})
+
 ipcMain.on('close_error', (e)  => {
     emergenteWindow.close();
     createMainWindow();
 });
-ipcMain.on('confirmar-usuario', (e)  => {
-    emergenteWindow.close()
-});
+
 ipcMain.on('close_confirmacion', (e)  => {
     emergenteWindow.close();
     createMainWindow();
+});
+ipcMain.on('cerrar-ventana-confirmacion', (e)  => {
+    emergenteWindow.close();
 });
 ipcMain.on('close_funcion', (e, userData)  => {
     AdmUserWindow.close();
@@ -228,16 +266,27 @@ ipcMain.on('openCU', async (e, user) => {
     }
 });
 
-ipcMain.on('eliminar-usuario', async (e, usuario, user)  => {
+ipcMain.on('confirmar-eliminar-usuario', async (e, usuario)  => {
     try {
-        EmergenteUser();
-        /*const data = await database.eliminarUsuario(usuario);*/
         await database.eliminarUsuario(usuario);
-        e.sender.send('usuario-eliminado',usuario);
+        e.sender.send('actualizar-user', usuario);
+        EmergenteUser();
     } catch (error) {
         console.error("Error al eliminar el usuario:", error);
     }
 });
+
+ipcMain.on('agregar-usuario', async(e,newUser)=>{
+    try{
+        await database.agregarUsuario(newUser);
+        e.sender.send('actualizar-user',newUser);
+        emergenteWindow.close();
+    }catch(error){
+        console.error("Error al agregar un nuevo usuario: ", error);
+    }
+})
+
+
 
 
 ipcMain.on('check-credentials', async (event, confirmUser) => {
@@ -279,4 +328,3 @@ ipcMain.on('check-credentials', async (event, confirmUser) => {
         createErrorWindow();
     }
 });
-

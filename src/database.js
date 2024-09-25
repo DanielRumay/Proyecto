@@ -7,6 +7,7 @@ const connection = mysql.createConnection({
     database: 'proyectologisticoo'
 });
 
+
 function checkCredentials(user, password) {
     return new Promise((resolve, reject) => {
         const query = 'SELECT * FROM usuario WHERE NombreUsu = ? AND Contraseña = ?';
@@ -50,6 +51,21 @@ function eliminarUsuario(nombreUsu){
     })
 }
 
+function agregarUsuario(userObj){
+    console.log(userObj);
+    return new Promise((resolve, reject)=>{
+        const query = 'INSERT INTO usuario(NombreUsu,Nombre,Apellido,Contraseña,Puesto,ContraseñaTemp) VALUES(?,?,?,?,?,?)'
+        const { NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp } = userObj;
+        
+        connection.query(query,[NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp], (error,resultar)=>{
+            if(error){
+                return reject(error);
+            }
+            resolve(resultar || [])
+        })
+    })
+}
 
-module.exports = { checkCredentials, getUsuarios, eliminarUsuario};
+
+module.exports = { checkCredentials, getUsuarios, eliminarUsuario, agregarUsuario};
 
