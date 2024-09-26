@@ -178,6 +178,7 @@ function createAdmUser(userData, user){
         AdmUserWindow.webContents.send('datos-usuarios', userData, user);
     });
 }
+
 function EmergenteUser(){
     emergenteWindow = new BrowserWindow({
         width: 1050,
@@ -201,7 +202,7 @@ function EmergenteUser(){
     });
 }
 
-function EmergenteAgregarUsuario(usuario = null){
+function EmergenteAgregarUsuario(){
     emergenteWindow = new BrowserWindow({
         width: 1050,
         height: 800,
@@ -215,35 +216,15 @@ function EmergenteAgregarUsuario(usuario = null){
         protocol: 'file',
         slashes: true,
     }))
-
-    if (usuario) {
-        isModificacion = true;
-        usuarioModificado = usuario;
-    } else {
-        isModificacion = false;
-        usuarioModificado = null;
-    }
-
-
     emergenteWindow.setMenuBarVisibility(false);
     emergenteWindow.on('closed', () => {
         emergenteWindow = null;
     });
     emergenteWindow.webContents.on('did-finish-load', () => {
-        if (isModificacion && usuarioModificado) {
-            // Separar nombre y apellido si es modificación
-            const { nombre, apellido } = separarNombreApellido(usuarioModificado.NombreCompleto);
-
-            // Enviar datos al formulario
-            emergenteWindow.webContents.send('cargar-datos-usuario', {
-                nombre,
-                apellido,
-                puesto: usuarioModificado.Puesto,
-                contraseñaTemp: usuarioModificado.ContraseñaTemp
-            });
-        }
+        emergenteWindow.webContents.send('guardar-usuario');
     });
 }
+
 function createProvUser(user) {
     ProvWindow = new BrowserWindow({
         width: 1400,
@@ -286,7 +267,7 @@ function EmergenteModificarUsuario(usuario) {
         emergenteWindow = null;
     });
     emergenteWindow.webContents.on('did-finish-load', () => {
-        emergenteWindow.webContents.send('cargar-datos-usuario', usuario);
+        emergenteWindow.webContents.send('modificar-usuario', usuario);
     });
 }
 
@@ -303,11 +284,18 @@ ipcMain.on('cerrarsecion', (e)  => {
 });
 ipcMain.on('Mensaje',(e)=>{
     console.log('Hola');
+});
+
+ipcMain.on('form-user',(e)=>{
+    EmergenteAgregarUsuario();
+});
+
+ipcMain.on('form-actualizar-user',(e,usuario)=>{
+    console.log(usuario);
+    EmergenteModificarUsuario(usuario);
 })
 
-ipcMain.on('form-user',(e, )=>{
-    EmergenteAgregarUsuario();
-})
+
 
 ipcMain.on('close_error', (e)  => {
     emergenteWindow.close();
@@ -361,6 +349,7 @@ ipcMain.on('cerrar-consultar-proveedores', (event, user) => {
     }
     createWindowCoordi(user);
 });
+
 ipcMain.on('agregar-usuario', async(e,newUser)=>{
     try{
         await database.agregarUsuario(newUser);
@@ -371,19 +360,15 @@ ipcMain.on('agregar-usuario', async(e,newUser)=>{
     }
 });
 
-ipcMain.on('modificar-usuario', (e, usuario) => {
-    EmergenteModificarUsuario(usuario);
-});
-
-ipcMain.on('actualizar-usuario', async (e, { nuevo, original }) => {
-    try {
-        await database.actualizarUsuario(nuevo, original);
-        e.sender.send('actualizar-user', nuevo.NombreUsu);
+ipcMain.on('usuario-modificado', async(e,newUser, userActual)=>{
+    try{
+        await database.modificarUsuario(newUser, userActual);
         emergenteWindow.close();
-    } catch (error) {
-        console.error('Error al actualizar el usuario: ', error);
+    }catch(error){
+        console.error("Error al agregar un nuevo usuario: ", error);
     }
-});
+})
+
 
 
 ipcMain.on('check-credentials', async (event, confirmUser) => {

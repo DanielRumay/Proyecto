@@ -40,11 +40,11 @@ ipcRenderer.on('datos-usuarios', (event, usuarios, user) => {
                 <td>******</td>
                 <td>${usuario.ContraseñaTemp}</td>
                 <td class="btn-container">
-                <button type="button" class="btn-eliminar" data-username="${usuario.NombreUsu}">Eliminar</button>
-            </td>
-            <td class="btn-container">
-                <button type="button" class="btn-modificar" data-username="${usuario.NombreUsu}">Modificar</button>
-            </td>
+                    <button type="button" id="btn-eliminar" class="btn-eliminar" data-username="${usuario.NombreUsu}">Eliminar</button>
+                </td>
+                <td class="btn-container">
+                    <button type="button" id="btn-modificar" class="btn-modificar" data-username="${usuario.NombreUsu}">Modificar</button>
+                </td>
             `;
             tablaBody.appendChild(fila);
         });
@@ -58,13 +58,10 @@ ipcRenderer.on('datos-usuarios', (event, usuarios, user) => {
         const botonesModificar = document.querySelectorAll('.btn-modificar');
         botonesModificar.forEach(btn => {
             btn.addEventListener('click', e => {
-                 const nombreUsuario = btn.getAttribute('data-username');
-                 const usuarioModificar = usuariosParaMostrar.find(usuario => usuario.NombreUsu === nombreUsuario);
-                
-                   if (usuarioModificar) {
-                //  // Enviar los datos del usuario a modificar para abrir el formulario
-                    ipcRenderer.send('modificar-usuario', usuarioModificar);
-                  }
+                const nombreUsuario = btn.getAttribute('data-username');
+
+                ipcRenderer.send('form-actualizar-user', nombreUsuario);
+                console.log(nombreUsuario);
             });
         });
     };
@@ -107,11 +104,13 @@ ipcRenderer.on('datos-usuarios', (event, usuarios, user) => {
 
 
 
-ipcRenderer.on('guardar-usuario', async (event, esModificacion, usuarioOriginal) => {
+ipcRenderer.on('guardar-usuario', async (event) => {
+
     const form = document.getElementById('userForm');
 
     form.addEventListener('submit', function (event) {
         event.preventDefault();
+
         const newUser = {
             NombreUsu: document.querySelector('#username').value,
             Nombre: document.querySelector('#name').value,
@@ -121,27 +120,32 @@ ipcRenderer.on('guardar-usuario', async (event, esModificacion, usuarioOriginal)
             ContraseñaTemp: document.querySelector('#tempPassword').value
         };
 
-        if (esModificacion) {
-            // Actualiza el usuario en la base de datos
-            ipcRenderer.send('actualizar-usuario', { nuevo: newUser, original: usuarioOriginal });
-        } else {
-            // Agrega un nuevo usuario
-            ipcRenderer.send('agregar-usuario', newUser);
-        }
-    });
-});
+        ipcRenderer.send('agregar-usuario', newUser);
+    })
+
+})
 
 
-ipcRenderer.on('cargar-datos-usuario', (event, usuario) => {
+ipcRenderer.on('modificar-usuario',async (event, userActual) =>{
+    const form = document.getElementById('userForm');
+    document.querySelector('#username').value = userActual;
 
-    document.querySelector('#username').value = usuario.NombreUsu;
-    document.querySelector('#name').value = usuario.Nombre;
-    document.querySelector('#lastname').value = usuario.Apellido;
-    document.querySelector('#password').value = usuario.Contraseña;
-    document.querySelector('#puesto').value = usuario.Puesto;
-    document.querySelector('#tempPassword').value = usuario.ContraseñaTemp;
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
 
-});
+        const newUser = {
+            NombreUsu: document.querySelector('#username').value,
+            Nombre: document.querySelector('#name').value,
+            Apellido: document.querySelector('#lastname').value,
+            Contraseña: document.querySelector('#password').value,
+            Puesto: document.querySelector('#puesto').value,
+            ContraseñaTemp: document.querySelector('#tempPassword').value
+        };
+        ipcRenderer.send('usuario-modificado', newUser, userActual);
+    })
+
+})
+
 
 ipcRenderer.on('solicitar-confirmacion', (e) => {
     const btnco = document.querySelectorAll('#confirmar');

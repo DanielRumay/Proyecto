@@ -11,7 +11,7 @@ const connection = mysql.createConnection({
 function checkCredentials(user, password) {
     return new Promise((resolve, reject) => {
         const query = 'SELECT * FROM usuario WHERE NombreUsu = ? AND Contraseña = ?';
-        
+
         connection.query(query, [user, password], (error, results) => {
             if (error) {
                 return reject(error);
@@ -29,7 +29,7 @@ function checkCredentials(user, password) {
 function getUsuarios() {
     return new Promise((resolve, reject) => {
         const query = 'SELECT NombreUsu, Nombre, Apellido, Puesto, Contraseña, ContraseñaTemp FROM usuario';
-        
+
         connection.query(query, (error, results) => {
             if (error) {
                 return reject(error);
@@ -39,11 +39,11 @@ function getUsuarios() {
     });
 }
 
-function eliminarUsuario(nombreUsu){
-    return new Promise((resolve, reject)=>{
+function eliminarUsuario(nombreUsu) {
+    return new Promise((resolve, reject) => {
         const query = 'DELETE FROM usuario WHERE NombreUsu = ?';
-        connection.query(query, [nombreUsu], (error,results)=>{
-            if(error){
+        connection.query(query, [nombreUsu], (error, results) => {
+            if (error) {
                 return reject(error);
             }
             resolve(results || []);
@@ -51,14 +51,14 @@ function eliminarUsuario(nombreUsu){
     })
 }
 
-function agregarUsuario(userObj){
+function agregarUsuario(userObj) {
     console.log(userObj);
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) => {
         const query = 'INSERT INTO usuario(NombreUsu,Nombre,Apellido,Contraseña,Puesto,ContraseñaTemp) VALUES(?,?,?,?,?,?)'
         const { NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp } = userObj;
-        
-        connection.query(query,[NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp], (error,resultar)=>{
-            if(error){
+
+        connection.query(query, [NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp], (error, resultar) => {
+            if (error) {
                 return reject(error);
             }
             resolve(resultar || [])
@@ -66,20 +66,20 @@ function agregarUsuario(userObj){
     })
 }
 
-function actualizarUsuario(userObj, userOriginal) {
+function modificarUsuario(userModificado, userActual) {
     return new Promise((resolve, reject) => {
-        const query = 'UPDATE usuario SET NombreUsu = ?, Nombre = ?, Apellido = ?, Contraseña = ?, Puesto = ?, ContraseñaTemp = ? WHERE NombreUsu = ?';
-        const { NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp } = userObj;
-        
-        connection.query(query, [NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp, userOriginal.NombreUsu], (error, results) => {
+
+        const query = 'UPDATE usuario set NombreUsu = ?, Nombre = ?, Apellido = ?, Contraseña = ?, Puesto = ?, ContraseñaTemp = ? WHERE NombreUsu = ?'
+        const { NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp } = userModificado;
+
+        connection.query(query, [NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp, userActual.nombreUsu], (error, resultar) => {
             if (error) {
                 return reject(error);
             }
-            resolve(results || []);
-        });
-    });
+            resolve(resultar || [])
+        })
+    })
 }
 
 
-module.exports = { checkCredentials, getUsuarios, eliminarUsuario, agregarUsuario, actualizarUsuario};
-
+module.exports = { checkCredentials, getUsuarios, eliminarUsuario, agregarUsuario, modificarUsuario };
