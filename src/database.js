@@ -7,6 +7,7 @@ const connection = mysql.createConnection({
     database: 'proyectologisticoo'
 });
 
+
 function checkCredentials(user, password) {
     return new Promise((resolve, reject) => {
         const query = 'SELECT * FROM usuario WHERE NombreUsu = ? AND Contraseña = ?';
@@ -27,7 +28,7 @@ function checkCredentials(user, password) {
 
 function getUsuarios() {
     return new Promise((resolve, reject) => {
-        const query = 'SELECT NombreUsu, CONCAT(Nombre, " ", Apellido) AS NombreCompleto, Puesto, Contraseña, ContraseñaTemp FROM usuario';
+        const query = 'SELECT NombreUsu, Nombre, Apellido, Puesto, Contraseña, ContraseñaTemp FROM usuario';
         
         connection.query(query, (error, results) => {
             if (error) {
@@ -50,5 +51,35 @@ function eliminarUsuario(nombreUsu){
     })
 }
 
+function agregarUsuario(userObj){
+    console.log(userObj);
+    return new Promise((resolve, reject)=>{
+        const query = 'INSERT INTO usuario(NombreUsu,Nombre,Apellido,Contraseña,Puesto,ContraseñaTemp) VALUES(?,?,?,?,?,?)'
+        const { NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp } = userObj;
+        
+        connection.query(query,[NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp], (error,resultar)=>{
+            if(error){
+                return reject(error);
+            }
+            resolve(resultar || [])
+        })
+    })
+}
 
-module.exports = { checkCredentials, getUsuarios, eliminarUsuario};
+function actualizarUsuario(userObj, userOriginal) {
+    return new Promise((resolve, reject) => {
+        const query = 'UPDATE usuario SET NombreUsu = ?, Nombre = ?, Apellido = ?, Contraseña = ?, Puesto = ?, ContraseñaTemp = ? WHERE NombreUsu = ?';
+        const { NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp } = userObj;
+        
+        connection.query(query, [NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp, userOriginal.NombreUsu], (error, results) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(results || []);
+        });
+    });
+}
+
+
+module.exports = { checkCredentials, getUsuarios, eliminarUsuario, agregarUsuario, actualizarUsuario};
+
