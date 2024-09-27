@@ -17,6 +17,16 @@
 .img{
     padding-top: 125px;
 }
+.img2 {
+    border-radius: 25px;
+    text-align: center;
+    position: absolute;
+    top: 45%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 50px;
+}
 .icon{
     padding-left: 20px;
 }
@@ -38,6 +48,19 @@
     padding-top: 80px;
     padding-left: 180px;
 
+}
+.botton2 {
+    font-size: 25px;
+    padding-bottom: 5px;
+    color: rgb(255, 255, 255);
+    border-color: rgb(119, 119, 119);
+    background: rgb(119, 119, 119);
+    border-radius: 15px;
+    text-align: center;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 .img_text{
     padding-left: 220px;
@@ -110,7 +133,7 @@
     overflow: visible;
 }
 
-.btn-eliminar {
+.btn-eliminar, .btn-modificar {
     position: absolute;
     top: 50%; /* Centrar verticalmente */
     transform: translateY(-50%); /* Ajuste para centrar */
@@ -124,6 +147,9 @@
 }
 
 #usuariosBody tr:hover .btn-eliminar {
+    display: block; 
+}
+#usuariosBody tr:hover .btn-modificar {
     display: block; 
 }
 
@@ -250,4 +276,26 @@
 
 .user-form-button:hover {
     background-color: #0056b3;
+}
+.error-message {
+    position: fixed; 
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #f44336; 
+    color: white;
+    padding: 15px;
+    border-radius: 5px; 
+    z-index: 1000;
+}
+.btn-volver {
+    background-color: #6c757d;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }

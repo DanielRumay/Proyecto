@@ -52,7 +52,6 @@ function eliminarUsuario(nombreUsu){
 }
 
 function agregarUsuario(userObj){
-    console.log(userObj);
     return new Promise((resolve, reject)=>{
         const query = 'INSERT INTO usuario(NombreUsu,Nombre,Apellido,Contraseña,Puesto,ContraseñaTemp) VALUES(?,?,?,?,?,?)'
         const { NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp } = userObj;
@@ -66,6 +65,21 @@ function agregarUsuario(userObj){
     })
 }
 
+function modificarUsuario(userModificado, userActual) {
+    return new Promise((resolve, reject) => {
 
-module.exports = { checkCredentials, getUsuarios, eliminarUsuario, agregarUsuario};
+        const query = 'UPDATE usuario set NombreUsu = ?, Nombre = ?, Apellido = ?, Contraseña = ?, Puesto = ?, ContraseñaTemp = ? WHERE NombreUsu = ?'
+        const { NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp } = userModificado;
+
+        connection.query(query, [NombreUsu, Nombre, Apellido, Contraseña, Puesto, ContraseñaTemp, userActual], (error, resultar) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(resultar || [])
+        })
+    })
+}
+
+
+module.exports = { checkCredentials, getUsuarios, eliminarUsuario, agregarUsuario, modificarUsuario};
 
