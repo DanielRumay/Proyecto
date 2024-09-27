@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Principal Evaluador</title>
+    <title>Electron & Mysql</title>
     <link rel="stylesheet" href="./bootstrap-5.0.2-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./evalu.css">
 </head>
@@ -62,7 +62,24 @@
         </div>
     </div>
     <script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
-    <script src="./principal_evalu.js"></script>
+    <script>
+
+        const { ipcRenderer } = require('electron');
+
+        const products = document.querySelector('#home');
+
+        ipcRenderer.on('check-credentials', (e, userData) => {
+            const cargoElement = document.querySelector('#cargo');
+
+            cargoElement.textContent = userData.Puesto;
+            const btns = document.querySelectorAll('#btnLogin');
+            btns.forEach(btn => {
+                btn.addEventListener('click', e => {
+                    ipcRenderer.send('close');
+                })
+            });
+        });
+    </script>
 </body>
 
 </html>

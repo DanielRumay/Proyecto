@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+    <link rel="stylesheet" href="./bootstrap-5.0.2-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="fondo">
+    <div class="user-form-container">
+        <h2 class="user-form-title">Formulario de Usuario</h2>
+        <button type="button" id="volver" class = 'btn-volver'>Volver</button>
+        <form id="userForm" class="user-form">
+            <div class="user-form-group">
+                <label for="username" class="user-form-label">Nombre de Usuario:</label>
+                <input type="text" id="username" name="username" class="user-form-input" required>
+            </div>
+            <div class="user-form-group">
+                <label for="name" class="user-form-label">Nombre:</label>
+                <input type="text" id="name" name="name" class="user-form-input" required>
+            </div>
+            <div class="user-form-group">
+                <label for="lastname" class="user-form-label">Apellido:</label>
+                <input type="text" id="lastname" name="lastname" class="user-form-input" required>
+            </div>
+            <div class="user-form-group">
+                <label for="password" class="user-form-label">Contraseña:</label>
+                <input type="password" id="password" name="password" class="user-form-input" required>
+            </div>
+            <div class="user-form-group">
+                <label for="puesto" class="user-form-label">Puesto:</label>
+                <select id="puesto" name="puesto" class="user-form-select" required>
+                    <option value="Administrador">Administrador</option>
+                    <option value="Evaluador">Evaluador</option>
+                    <option value="Coordinador">Coordinador</option>
+                </select>
+            </div>
+            <div class="user-form-group">
+                <label for="tempPassword" class="user-form-label">Contraseña Temporal:</label>
+                <input type="password" id="tempPassword" name="tempPassword" class="user-form-input" required>
+            </div>
+            <div class="user-form-buttons">
+                <button type="submit" id="GuardarU">Registrar</button>
+            </div>
+        </form>
+        <div id="error-message" class="error-message" style="display: none;"></div>
+    </div>
+    <script src="./principal_Admin.js" defer></script>
+</body>
+</html>

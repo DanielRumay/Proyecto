@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Proveedor</title>
+    <link rel="stylesheet" href="./bootstrap-5.0.2-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="coordi.css">
+</head>
+<body class="fondo">
+    <div class="prov-form-container">
+        <h2 class="prov-form-title">Formulario de Proveedor</h2>
+        <button type="button" id="volver" class = 'btn-volver'>Volver</button>
+        <form id="provForm" class="prov-form">
+            <div class="prov-form-group">
+                <label for="name" class="prov-form-label">Nombre:</label>
+                <input type="text" id="namep" name="namep" class="prov-form-input" required>
+            </div>
+            <div class="prov-form-group">
+                <label for="lastnamep" class="prov-form-label">Contacto(Correo):</label>
+                <input type="text" id="contacto" name="contacto" class="prov-form-input" required>
+            </div>
+            <div class="prov-form-group">
+                <label for="disponibilidad" class="prov-form-label">Disponibilidad:</label>
+                <select id="disponibilidad" name="disponibilidad" class="prov-form-select" required>
+                    <option value=1>Sí</option>
+                    <option value=0>No</option>
+                </select>
+            </div>
+            <div class="prov-form-buttons">
+                <button type="submit" id="GuardarP">Registrar</button>
+            </div>
+        </form>
+        <div id="error-message" class="error-message" style="display: none;"></div>
+    </div>
+    <script src="./principal_coordi.js" defer></script>
+</body>
+</html>

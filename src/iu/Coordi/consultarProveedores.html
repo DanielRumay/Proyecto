@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gestionProveedores</title>
+    <link rel="stylesheet" href="./bootstrap-5.0.2-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./coordi.css">
+</head>
+
+<body class="fondo">
+    <nav class="navbar bg-body-tertiary">
+        <div class="container">
+            <div class="row">
+                <div class="navbar">
+                    <img src="./img/pixelcut-export.ico" alt="Logo" width="70" height="40" class="icon d-inline-block align-text-top">
+                    <span class="text navbar-brand mb-0 h1">EVERYWHERE TRAVEL</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="navbar">
+                    <label class="text h1" id="cargo">Coordinador</label>
+                    <img src="./img/user.ico" alt="Logo" width="60" height="40" class="icon d-inline-block align-text-top">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Botón Volver alineado a la derecha -->
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-12 text-end">
+                <button type="button" id="btnVolver" class="cerrar button is-info is-rounded">Volver</button>
+            </div>
+        </div>
+
+        <h2>Proveedores:</h2>
+
+        <div class="mb-3 row d-flex align-items-center justify-content-between">
+            <div class="col-md-5">
+                <label for="buscarProveedor" class="form-label">Filtrar por nombre:</label>
+            </div>
+            <div class="col-md-7">
+                <label for="selectDisponibilidad" class="form-label">Filtrar por disponibilidad:</label>
+            </div>
+        </div>
+        <div class="mb-3 row d-flex align-items-center justify-content-between">
+            <!-- Input de búsqueda con label -->
+            <div class="col-md-5">
+                <input id="f-proveedor" type="text" class="form-control" id="buscarProveedor" placeholder="Inserte nombre de Proveedor">
+            </div>
+    
+            <!-- Select de filtro con label -->
+            <div class="col-md-5">
+                <select id="f-disponibilidad" class="form-select">
+                    <option>Todos</option>
+                    <option>Sí</option>
+                    <option>No</option>
+                </select>
+            </div>
+    
+            <!-- Botones de búsqueda y agregar -->
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" id="Buscarp" class="botton me-4">Buscar</button>
+                <button type="submit" id="btnAgregar" class="botton">Agregar</button>
+            </div>            
+        </div>
+    
+        <!-- Tabla de proveedores -->
+        <div class="table-container">
+            <table id="tablaProveedores">
+                <thead>
+                    <tr>
+                        <th>ID_Proveedor</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Disponibilidad</th>
+                        <th>Modificar</th>
+                        <th>Ver servicios</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="ProveedoresBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="./bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+    <script src="./principal_coordi.js"></script>
+</body>
+
+</html>
