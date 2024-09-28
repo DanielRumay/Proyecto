@@ -3,6 +3,7 @@ const database = require('./database.js');
 const url = require('url');
 const path = require('path');
 const { create } = require('domain');
+const { utimesSync } = require('fs');
 
 if (process.env.NODE_ENV !== 'production') {
     require('electron-reload')(__dirname, {
@@ -10,7 +11,7 @@ if (process.env.NODE_ENV !== 'production') {
     })
 }
 
-let mainWindow, emergenteWindow, newProductWindow, AdmUserWindow, errorDuplicadoWindow, ProvWindow, errorDuplicadoWindow2
+let mainWindow, emergenteWindow, newProductWindow, AdmUserWindow, errorDuplicadoWindow, ProvWindow, errorDuplicadoWindow2, ProvemergenteWindow
 let userLogged = null;
 
 app.on('ready', () => {
@@ -18,7 +19,7 @@ app.on('ready', () => {
 })
 
 //----------------------VENTANAS ----------------------
-function createMainWindow(){
+function createMainWindow() {
     mainWindow = new BrowserWindow({
         width: 1400,
         height: 1600,
@@ -40,7 +41,7 @@ function createMainWindow(){
     });
 }
 
-function createErrorWindow(){
+function createErrorWindow() {
     emergenteWindow = new BrowserWindow({
         width: 1050,
         height: 600,
@@ -62,7 +63,7 @@ function createErrorWindow(){
     });
 }
 
-function createConfirmWindow(){
+function createConfirmWindow() {
     emergenteWindow = new BrowserWindow({
         width: 1050,
         height: 600,
@@ -152,7 +153,7 @@ function createWindowAdmin(userData) {
         newProductWindow = null;
     });
 }
-function createAdmUser(userData, user){
+function createAdmUser(userData, user) {
     AdmUserWindow = new BrowserWindow({
         width: 1400,
         height: 1600,
@@ -174,7 +175,7 @@ function createAdmUser(userData, user){
         AdmUserWindow.webContents.send('datos-usuarios', userData, user);
     });
 }
-function EmergenteUser(){
+function EmergenteUser() {
     emergenteWindow = new BrowserWindow({
         width: 1050,
         height: 600,
@@ -197,7 +198,7 @@ function EmergenteUser(){
     });
 }
 
-function EmergenteAgregarUsuario(){
+function EmergenteAgregarUsuario() {
     emergenteWindow = new BrowserWindow({
         width: 1050,
         height: 800,
@@ -220,7 +221,7 @@ function EmergenteAgregarUsuario(){
     });
 }
 
-function EmergenteModificarUsuario(usuario){
+function EmergenteModificarUsuario(usuario) {
     emergenteWindow = new BrowserWindow({
         width: 1050,
         height: 800,
@@ -244,8 +245,8 @@ function EmergenteModificarUsuario(usuario){
 }
 
 
-function EmergenteErrorDuplicado(){
-    errorDuplicadoWindow  = new BrowserWindow({
+function EmergenteErrorDuplicado() {
+    errorDuplicadoWindow = new BrowserWindow({
         width: 1050,
         height: 600,
         webPreferences: {
@@ -253,66 +254,66 @@ function EmergenteErrorDuplicado(){
             contextIsolation: false
         }
     });
-    errorDuplicadoWindow .loadURL(url.format({
+    errorDuplicadoWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'iu/Admin/errorDuplicado.html'),
         protocol: 'file',
         slashes: true,
     }))
 
-    errorDuplicadoWindow .setMenuBarVisibility(false);
+    errorDuplicadoWindow.setMenuBarVisibility(false);
 
-    errorDuplicadoWindow .on('closed', () => {
+    errorDuplicadoWindow.on('closed', () => {
         errorDuplicadoWindow = null;
     });
 }
 
 
 //----------------------IPC MAIN----------------------
-ipcMain.on('close', (e)  => {
+ipcMain.on('close', (e) => {
     newProductWindow.close();
     createConfirmWindow();
 });
-ipcMain.on('cerrarsecion', (e)  => {
+ipcMain.on('cerrarsecion', (e) => {
     emergenteWindow.close();
     createMainWindow();
 });
-ipcMain.on('Mensaje',(e)=>{
+ipcMain.on('Mensaje', (e) => {
     console.log('Hola');
 })
 
-ipcMain.on('form-user',(e, )=>{
+ipcMain.on('form-user', (e,) => {
     AdmUserWindow.close();
     EmergenteAgregarUsuario();
 })
 
-ipcMain.on('close_error', (e)  => {
+ipcMain.on('close_error', (e) => {
     emergenteWindow.close();
     createMainWindow();
 });
 
-ipcMain.on('close_confirmacion', (e)  => {
+ipcMain.on('close_confirmacion', (e) => {
     emergenteWindow.close();
     createMainWindow();
 });
 
-ipcMain.on('close_funcion', (e, userData)  => {
+ipcMain.on('close_funcion', (e, userData) => {
     AdmUserWindow.close();
     createWindowAdmin(userData);
 });
 
 
-ipcMain.on('cerrar-error',async (e)=>{
-    try{
+ipcMain.on('cerrar-error', async (e) => {
+    try {
         const userData = await database.getUsuarios();
         createAdmUser(userData, userLogged);
-        if(errorDuplicadoWindow){ await errorDuplicadoWindow.close(); }
+        if (errorDuplicadoWindow) { await errorDuplicadoWindow.close(); }
         await emergenteWindow.close();
-    }catch(error){
+    } catch (error) {
         console.log(error);
     }
 })
 
-ipcMain.on('form-actualizar-user', async (e, usuario) =>{
+ipcMain.on('form-actualizar-user', async (e, usuario) => {
     await EmergenteModificarUsuario(usuario);
     await AdmUserWindow.close();
 });
@@ -332,7 +333,7 @@ ipcMain.on('openCU', async (e, user) => {
 });
 
 // FUNCIONES PARA ELIMINAR EL USUARIO
-ipcMain.on('confirmar-eliminar-usuario', async (e, usuario)  => {
+ipcMain.on('confirmar-eliminar-usuario', async (e, usuario) => {
     try {
         await database.eliminarUsuario(usuario);
         //e.sender.send('actualizar-user-eliminado', usuario);
@@ -342,9 +343,9 @@ ipcMain.on('confirmar-eliminar-usuario', async (e, usuario)  => {
     }
 });
 
-ipcMain.on('cerrar-ventana-confirmacion', async(e)  => {
-    
-    if(AdmUserWindow){
+ipcMain.on('cerrar-ventana-confirmacion', async (e) => {
+
+    if (AdmUserWindow) {
         await AdmUserWindow.close();
     }
     const userData = await database.getUsuarios();
@@ -353,27 +354,27 @@ ipcMain.on('cerrar-ventana-confirmacion', async(e)  => {
 });
 
 // ---FUNCIONES PARA AGREGAR EL USUARIO---
-ipcMain.on('agregar-usuario', async(e,newUser)=>{
-    try{
+ipcMain.on('agregar-usuario', async (e, newUser) => {
+    try {
         await database.agregarUsuario(newUser);
         const userData = await database.getUsuarios();
         emergenteWindow.close();
         createAdmUser(userData, userLogged);
-    }catch(error){
+    } catch (error) {
         EmergenteErrorDuplicado();
     }
 })
 
 // ---FUNCION PARA MODIFICAR USUARIO---
 
-ipcMain.on('usuario-modificado', async (e, newUser,userActual)=>{
+ipcMain.on('usuario-modificado', async (e, newUser, userActual) => {
     const userData = await database.getUsuarios();
-    try{
+    try {
         await database.modificarUsuario(newUser, userActual);
         const userData = await database.getUsuarios();
         emergenteWindow.close();
         createAdmUser(userData, userLogged);
-    }catch(error){
+    } catch (error) {
         console.log(error);
         emergenteWindow.close();
         EmergenteErrorDuplicado();
@@ -389,19 +390,19 @@ ipcMain.on('check-credentials', async (event, confirmUser) => {
         if (userData) {
             userLogged = userData
             const cargo = userData.Puesto;
-            if(cargo=="Administrador"){
+            if (cargo == "Administrador") {
                 if (mainWindow) {
                     mainWindow.close();
                 }
                 createWindowAdmin(userData);
             }
-            if(cargo=="Coordinador"){
+            if (cargo == "Coordinador") {
                 if (mainWindow) {
                     mainWindow.close();
                 }
                 createWindowCoordi(userData);
             }
-            if(cargo=="Evaluador"){
+            if (cargo == "Evaluador") {
                 if (mainWindow) {
                     mainWindow.close();
                 }
@@ -423,7 +424,31 @@ ipcMain.on('check-credentials', async (event, confirmUser) => {
 
 //aquí comienza proveedores:
 
-function createProvUser(provData,user) {
+
+function EmergenteProv() {
+    emergenteWindow = new BrowserWindow({
+        width: 1050,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    emergenteWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Coordi/confirmacionEP.html'),
+        protocol: 'file',
+        slashes: true,
+    }))
+    emergenteWindow.setMenuBarVisibility(false);
+    emergenteWindow.on('closed', () => {
+        emergenteWindow = null;
+    });
+    emergenteWindow.webContents.on('did-finish-load', () => {
+        emergenteWindow.webContents.send('solicitar-confirmacionp');
+    });
+}
+
+function createProvUser(provData, user) {
     ProvWindow = new BrowserWindow({
         width: 1400,
         height: 1600,
@@ -446,27 +471,7 @@ function createProvUser(provData,user) {
     });
 }
 
-ipcMain.on('open-consultar-proveedores', async (event, user) => {
-    try {
-        const userData = await database.getProveedores();
-        if (newProductWindow) {
-            newProductWindow.close();
-        }
-        createProvUser(userData, user);
-    } catch (error) {
-        console.error("Error al obtener los proveedores:", error);
-    }
-});
-
-ipcMain.on('cerrar-consultar-proveedores', (event, user) => {
-    if (ProvWindow) {
-        ProvWindow.close();
-    }
-    createWindowCoordi(user);
-});
-
-
-function EmergenteAgregarProveedor(){
+function EmergenteAgregarProveedor() {
     ProvemergenteWindow = new BrowserWindow({
         width: 1050,
         height: 800,
@@ -489,37 +494,77 @@ function EmergenteAgregarProveedor(){
     });
 }
 
-ipcMain.on('form-prov',(e)=>{
-        ProvWindow.close();
-    EmergenteAgregarProveedor();
-})
+function EmergenteModificarProveedor(prov) {
+    ProvemergenteWindow = new BrowserWindow({
+        width: 1050,
+        height: 800,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    ProvemergenteWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Coordi/formProveedor.html'),
+        protocol: 'file',
+        slashes: true,
+    }))
+    ProvemergenteWindow.setMenuBarVisibility(false);
+    ProvemergenteWindow.on('closed', () => {
+        ProvemergenteWindow = null;
+    });
+    ProvemergenteWindow.webContents.on('did-finish-load', () => {
+        ProvemergenteWindow.webContents.send('modificar-proveedor', prov);
+    });
+}
 
-// ---FUNCIONES PARA AGREGAR EL PROVEEDOR---
-ipcMain.on('agregar-proveedor', async(e,newProv)=>{
-    try{
-        await database.agregarProveedores(newProv);
-        const userData = await database.getProveedores();
-        ProvemergenteWindow.close();
-        createProvUser(provData, user);
-    }catch(error){
-        EmergenteErrorDuplicado2();
-    }
-})
+function EmergenteServiciosProveedor(ID_Proveedor) {
+    ProvemergenteWindow = new BrowserWindow({
+        width: 1050,
+        height: 800,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    ProvemergenteWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Coordi/servicios.html'),
+        protocol: 'file',
+        slashes: true,
+    }))
+    ProvemergenteWindow.setMenuBarVisibility(false);
+    ProvemergenteWindow.on('closed', () => {
+        ProvemergenteWindow = null;
+    });
+    ProvemergenteWindow.webContents.on('did-finish-load', () => {
+        ProvemergenteWindow.webContents.send('servicios-proveedor', ID_Proveedor);
+    });
+}
 
-ipcMain.on('cerrar-error2',async (e)=>{
-    try{
-        const userData = await database.getProveedores();
-        createProvUser(userData, userLogged);
-        if(errorDuplicadoWindow2){ 
-            await errorDuplicadoWindow2.close(); }
-        await ProvemergenteWindow.close();
-    }catch(error){
-        console.log(error);
-    }
-})
+function EmergenteModificarServiciosProveedor(serviciosCombinados, ID_Proveedor) {
+    ProvemergenteWindow = new BrowserWindow({
+        width: 1050,
+        height: 800,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    ProvemergenteWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Coordi/servicios.html'),
+        protocol: 'file',
+        slashes: true,
+    }))
+    ProvemergenteWindow.setMenuBarVisibility(false);
+    ProvemergenteWindow.on('closed', () => {
+        ProvemergenteWindow = null;
+    });
+    ProvemergenteWindow.webContents.on('did-finish-load', () => {
+        ProvemergenteWindow.webContents.send('modificar-servicios-proveedor', serviciosCombinados, ID_Proveedor);
+    });
+}
 
-function EmergenteErrorDuplicado2(){
-    errorDuplicadoWindow2  = new BrowserWindow({
+function EmergenteErrorDuplicado2() {
+    errorDuplicadoWindow2 = new BrowserWindow({
         width: 1050,
         height: 600,
         webPreferences: {
@@ -527,33 +572,173 @@ function EmergenteErrorDuplicado2(){
             contextIsolation: false
         }
     });
-    errorDuplicadoWindow2 .loadURL(url.format({
+    errorDuplicadoWindow2.loadURL(url.format({
         pathname: path.join(__dirname, 'iu/Coordi/errorDuplicado2.html'),
         protocol: 'file',
         slashes: true,
     }))
 
-    errorDuplicadoWindow2 .setMenuBarVisibility(false);
+    errorDuplicadoWindow2.setMenuBarVisibility(false);
 
-    errorDuplicadoWindow2 .on('closed', () => {
+    errorDuplicadoWindow2.on('closed', () => {
         errorDuplicadoWindow2 = null;
     });
 }
 
-// FUNCIONES PARA ELIMINAR AL PROVEEDOR
-ipcMain.on('confirmar-eliminar-proveedor', async (e, proveedor)  => {
+function EmergenteErrorServicio() {
+    errorDuplicadoWindow2 = new BrowserWindow({
+        width: 1050,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    errorDuplicadoWindow2.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Coordi/errorServicio.html'),
+        protocol: 'file',
+        slashes: true,
+    }))
+
+    errorDuplicadoWindow2.setMenuBarVisibility(false);
+
+    errorDuplicadoWindow2.on('closed', () => {
+        errorDuplicadoWindow2 = null;
+    });
+}
+
+
+// IPC MAIN
+
+ipcMain.on('open-consultar-proveedores', async (event, user) => {
     try {
-        await database.eliminarProveedores(proveedor);
-        //e.sender.send('actualizar-user-eliminado', usuario);
-        EmergenteProv();
+        const userData = await database.getProveedores();
+        if (newProductWindow) {
+            newProductWindow.close();
+        }
+        createProvUser(userData, user);
     } catch (error) {
-        console.error("Error al eliminar el usuario:", error);
+        console.error("Error al obtener los proveedores:", error);
     }
 });
 
-ipcMain.on('cerrar-ventana-confirmacionp', async(e)  => {
-    
-    if(ProvWindow){
+ipcMain.on('cerrar-consultar-proveedores', (event, user) => {
+    if (ProvWindow) {
+        ProvWindow.close();
+    }
+    createWindowCoordi(user);
+});
+
+
+ipcMain.on('form-prov', (e) => {
+    ProvWindow.close();
+    EmergenteAgregarProveedor();
+})
+
+ipcMain.on('form-servicios', async (e, ID_Proveedor) => {
+    EmergenteServiciosProveedor(ID_Proveedor);
+    await ProvWindow.close();
+})
+
+ipcMain.on('form-actualizar-servicios', async (e, ID_Proveedor) => {
+    try {
+        const ID_servicios = await database.getIDServicioProveedor(ID_Proveedor);
+
+        if (ID_servicios.length > 0) {
+            const ids = ID_servicios.map(servicio => servicio.ID_Servicio);
+
+            const [servicios, disponibilidad, precios] = await Promise.all([
+                database.getNombreServicio(ids),
+                database.getDisponibilidadServicio(ids, ID_Proveedor),
+                database.getPrecioServicioProveedor(ID_Proveedor, ids)
+            ]);
+
+            // Combina la información
+            const serviciosCombinados = servicios.map((servicio, index) => ({
+                nombre: servicio.Servicio,
+                disponibilidad: disponibilidad[index].Disponibilidad,
+                precio: precios[index].Precio
+            }));
+            ProvWindow.close();
+            EmergenteModificarServiciosProveedor(serviciosCombinados, ID_Proveedor);
+        }
+        else {
+            const provData = await database.getProveedores();
+            createProvUser(provData, userLogged)
+            await ProvWindow.close();
+        }
+    } catch (error) {
+        console.error("Error al obtener servicios: ", error);
+    }
+})
+
+ipcMain.on('form-actualizar-proveedor', async (e, prov) => {
+    EmergenteModificarProveedor(prov);
+    await ProvWindow.close();
+})
+
+
+// ---FUNCIONES PARA AGREGAR EL PROVEEDOR---
+ipcMain.on('agregar-proveedor', async (e, newProv) => {
+    try {
+        console.log(newProv);
+        await database.agregarProveedores(newProv);
+        const provData = await database.getProveedores();
+        ProvemergenteWindow.close();
+        createProvUser(provData, userLogged);
+    } catch (error) {
+        console.log(error);
+        EmergenteErrorDuplicado2();
+    }
+})
+
+// ---FUNCIONES PARA SERVICIOS AL PROVEEDOR---
+
+ipcMain.on('servicios-dProveedor', async (e, Servicio_Proveedor) => {
+    const { servicios, precio, disponibilidad } = Servicio_Proveedor;
+    const ID_Proveedor = Servicio_Proveedor.id_proveedor;
+    try {
+        if (servicios.includes("Alojamiento")) {
+            const id_servicio = await database.getIDServicio("Alojamiento")
+            const servicio = id_servicio[0]?.ID_Servicio;
+            await database.agregarServicioProveedor(servicio, ID_Proveedor, precio["Alojamiento"], disponibilidad["Alojamiento"]);
+        }
+        if (servicios.includes("Transporte")) {
+            const id_servicio = await database.getIDServicio("Transporte")
+            const servicio = id_servicio[0]?.ID_Servicio;
+            await database.agregarServicioProveedor(servicio, ID_Proveedor, precio["Transporte"], disponibilidad["Transporte"]);
+        }
+        if (servicios.includes("Turismo")) {
+            const id_servicio = await database.getIDServicio("Turismo")
+            const servicio = id_servicio[0]?.ID_Servicio;
+            await database.agregarServicioProveedor(servicio, ID_Proveedor, precio["Turismo"], disponibilidad["Turismo"]);
+        }
+        const provData = await database.getProveedores();
+        ProvemergenteWindow.close();
+        createProvUser(provData, userLogged);
+    } catch (error) {
+        console.log(error);
+        const provData = await database.getProveedores();
+        EmergenteErrorServicio(provData);
+        await ProvemergenteWindow.close();
+
+    }
+})
+
+// FUNCION DE VENTANAS (CERRADO)
+ipcMain.on('cerrar-error2', async (e) => {
+    try {
+        const provData = await database.getProveedores();
+        createProvUser(provData, userLogged);
+        if (errorDuplicadoWindow2) { await errorDuplicadoWindow2.close(); }
+        await ProvemergenteWindow.close();
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+ipcMain.on('cerrar-ventana-confirmacionp', async (e) => {
+    if (ProvWindow) {
         await ProvWindow.close();
     }
     const provData = await database.getProveedores();
@@ -561,25 +746,70 @@ ipcMain.on('cerrar-ventana-confirmacionp', async(e)  => {
     await emergenteWindow.close();
 });
 
-function EmergenteProv(){
-    emergenteWindow = new BrowserWindow({
-        width: 1050,
-        height: 600,
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false
+// FUNCION PARA MODIFICAR PROVEEDOR
+
+ipcMain.on('proveedor-modificado', async (e, newProv, prov) => {
+
+    try {
+        await database.modificarProveedores(newProv, prov);
+        const provData = await database.getProveedores();
+        ProvemergenteWindow.close();
+        createProvUser(provData, userLogged);
+    } catch (error) {
+        console.log(error);
+        ProvemergenteWindow.close();
+        EmergenteErrorDuplicado2();
+    }
+})
+//-------------------------------------------------------------------------
+
+ipcMain.on('actualizar-servicio-proveedor', async (e, serviciosActualizados, ID_Proveedor) => {
+    try {
+        for (const servicio of serviciosActualizados) {
+            const { disponibilidad, precio, nombre } = servicio;
+
+            const id_servicio = await database.getIDServicio(nombre);
+            const servicioId = id_servicio[0]?.ID_Servicio;
+
+            if (servicioId) {
+                await database.modificarServicioProveedor(servicioId, ID_Proveedor, precio, disponibilidad);
+            }
         }
-    });
-    emergenteWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'iu/Coordi/confirmacionEP.html'),
-        protocol: 'file',
-        slashes: true,
-    }))
-    emergenteWindow.setMenuBarVisibility(false);
-    emergenteWindow.on('closed', () => {
-        emergenteWindow = null;
-    });
-    emergenteWindow.webContents.on('did-finish-load', () => {
-        emergenteWindow.webContents.send('solicitar-confirmacionp');
-    });
-}
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+// FUNCIONES PARA ELIMINAR AL PROVEEDOR
+ipcMain.on('confirmar-eliminar-proveedor', async (e, proveedor) => {
+    try {
+        await database.eliminarProveedores(proveedor);
+        EmergenteProv();
+    } catch (error) {
+        console.error("Error al eliminar el usuario:", error);
+    }
+});
+
+// OBTENER NOMBRES DE LOS SERVICIOS DEL PROVEEDOR
+ipcMain.handle('obtener-datos-servicio', async (e, ID_Proveedor) => {
+    try {
+        const servicios = await database.getIDServicioProveedor(ID_Proveedor);
+        const idsServicios = servicios.map(servicio => servicio.ID_Servicio);
+        let nombresServicios = [];
+        let disponibilidadServicios = [];
+        let preciosServicios = [];
+
+        if (idsServicios.length > 0) {
+            nombresServicios = await database.getNombreServicio(idsServicios);
+            disponibilidadServicios = await database.getDisponibilidadServicio(idsServicios, ID_Proveedor);
+            preciosServicios = await database.getPrecioServicioProveedor(ID_Proveedor, idsServicios);
+        }
+        return {
+            nombres: nombresServicios.map(servicio => servicio.Servicio),
+            disponibilidad: disponibilidadServicios.map(disponibilidad => disponibilidad.Disponibilidad),
+            precios: preciosServicios.map(precio => precio.Precio)
+        }
+    } catch (error) {
+        console.log(error);
+    }
+})

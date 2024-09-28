@@ -57,7 +57,6 @@ ipcRenderer.on('datos-usuarios', (event, usuarios, user) => {
         botonesEliminar.forEach(btn => {
             btn.addEventListener('click', e => {
                 const nombreUsuario = btn.getAttribute('data-username');
-                ipcRenderer.send('e-user');
                 ipcRenderer.send('confirmar-eliminar-usuario', nombreUsuario);
             });
         });

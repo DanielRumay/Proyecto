@@ -25,7 +25,7 @@ function checkCredentials(user, password) {
         });
     });
 }
-
+// -------------USUARIOS-------------
 function getUsuarios() {
     return new Promise((resolve, reject) => {
         const query = 'SELECT NombreUsu, CONCAT(Nombre, " ", Apellido) AS NombreCompleto, Puesto, Contraseña, ContraseñaTemp FROM usuario';
@@ -79,10 +79,10 @@ function modificarUsuario(userModificado, userActual) {
         })
     })
 }
-
+// -------------PROVEEDORES-------------
 function getProveedores() {
     return new Promise((resolve, reject) => {
-        const query = 'SELECT ID_Proveedor, Nombre, Contacto, Disponibilidad FROM proveedor';
+        const query = 'SELECT ID_Proveedor, Nombre, Contacto FROM proveedor';
 
         connection.query(query, (error, results) => {
             if (error) {
@@ -100,10 +100,10 @@ function getProveedores() {
 
 function agregarProveedores(provObj){
     return new Promise((resolve, reject)=>{
-        const query = 'INSERT INTO proveedor(Nombre,Contacto,Disponibilidad) VALUES(?,?,?)'
-        const { Nombre,Contacto,Disponibilidad } = provObj;
+        const query = 'INSERT INTO proveedor(Nombre,Contacto) VALUES(?,?)'
+        const { Nombre,Contacto } = provObj;
         
-        connection.query(query,[Nombre,Contacto,Disponibilidad], (error,resultar)=>{
+        connection.query(query,[Nombre,Contacto], (error,resultar)=>{
             if(error){
                 return reject(error);
             }
@@ -112,18 +112,144 @@ function agregarProveedores(provObj){
     })
 }
 
-function eliminarProveedores(nombreProv){
-    return new Promise((resolve, reject)=>{
-        const query = 'DELETE FROM proveedor WHERE Nombre = ?';
-        connection.query(query, [nombreProv], (error,results)=>{
+function eliminarProveedores(nombreProv) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Primero, eliminar todas las relaciones en proveedor_servicio
+            const deleteRelationsQuery = 'DELETE FROM proveedor_servicio WHERE ID_Proveedor = (SELECT ID_Proveedor FROM proveedor WHERE Nombre = ?)';
+            await new Promise((resolveRelations, rejectRelations) => {
+                connection.query(deleteRelationsQuery, [nombreProv], (error, results) => {
+                    if (error) {
+                        return rejectRelations(error);
+                    }
+                    resolveRelations(results);
+                });
+            });
+
+            // Luego, eliminar el proveedor
+            const deleteProveedorQuery = 'DELETE FROM proveedor WHERE Nombre = ?';
+            connection.query(deleteProveedorQuery, [nombreProv], (error, results) => {
+                if (error) {
+                    return reject(error);
+                }
+                resolve(results || []);
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+function modificarProveedores(newProv,prov){
+    return new Promise((resolve, reject) => {
+        query = 'UPDATE proveedor SET Nombre=?, Contacto=?, Disponibilidad=? WHERE Nombre =?';
+        const {Nombre,Contacto, Disponibilidad} = newProv;
+
+        connection.query(query, [Nombre, Contacto, Disponibilidad, prov], (error,resultar)=>{
             if(error){
                 return reject(error);
             }
-            resolve(results || []);
+            resolve(resultar || []);
+        })
+    })
+}
+
+function getIDServicio(servicio){
+    return new Promise((resolve, reject)=>{
+        query = 'SELECT ID_Servicio FROM servicio WHERE Servicio =?';
+        connection.query(query, [servicio], (error, resultar)=>{
+            if(error){
+                return reject(error);
+            }
+            resolve(resultar || []);
+        })
+    })
+}
+
+function agregarServicioProveedor(servicio, ID_Proveedor, precio, disponibilidad){
+    return new Promise((resolve, reject)=>{
+        query = 'INSERT INTO proveedor_servicio (ID_Proveedor,ID_Servicio,Precio, Disponibilidad) VALUES (?,?,?,?)';
+        connection.query(query, [ID_Proveedor, servicio, precio,disponibilidad ], (error,resultar)=>{
+            if(error){
+                return reject(error);
+            }
+            resolve(resultar || []);
         })
     })
 }
 
 
-module.exports = { checkCredentials, getUsuarios, eliminarUsuario, agregarUsuario, modificarUsuario, getProveedores, agregarProveedores,eliminarProveedores };
+function getIDServicioProveedor(ID_Proveedor){
+    return new Promise((resolve, reject)=>{
+        query = 'SELECT ID_Servicio FROM proveedor_servicio WHERE ID_Proveedor =?';
+        connection.query(query, [ID_Proveedor], (error, resultar)=>{
+            if(error){
+                return reject(error);
+            }
+            resolve(resultar || []);
+        })
+    })
+}
+
+function getPrecioServicioProveedor(ID_Proveedor, ID_Servicio){
+    return new Promise((resolve, reject)=>{
+        const placeholders = ID_Servicio.map(() => '?').join(',');
+        query = `SELECT Precio FROM proveedor_servicio WHERE ID_Proveedor =? AND ID_Servicio IN (${placeholders})`;
+        connection.query(query, [ID_Proveedor, ...ID_Servicio], (error, resultar)=>{
+            if(error){
+                return reject(error);
+            }
+            resolve(resultar || []);
+        })
+    })
+}
+
+function getNombreServicio(ID_Servicio) {
+    return new Promise((resolve, reject) => {
+        const placeholders = ID_Servicio.map(() => '?').join(',');
+        const query = `SELECT Servicio FROM servicio WHERE ID_Servicio IN (${placeholders})`;
+        
+        connection.query(query, ID_Servicio, (error, resultado) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(resultado || []);
+        });
+    });
+}
+
+function getDisponibilidadServicio(ID_Servicio, ID_Proveedor){
+    return new Promise((resolve, reject) => {
+        const placeholders = ID_Servicio.map(() => '?').join(',');
+        const query = `SELECT Disponibilidad FROM proveedor_servicio WHERE ID_Servicio IN (${placeholders}) AND ID_Proveedor =?`;
+        
+        connection.query(query, [...ID_Servicio, ID_Proveedor], (error, resultado) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(resultado || []);
+        });
+    });
+}
+
+function modificarServicioProveedor(idServicio, idProveedor, precio, disponibilidad) {
+    return new Promise((resolve, reject) => {
+        const query = `
+            UPDATE proveedor_servicio
+            SET precio = ?, disponibilidad = ?
+            WHERE ID_Servicio = ? AND ID_Proveedor = ?;
+        `;
+        const params = [precio, disponibilidad, idServicio, idProveedor];
+
+        connection.query(query, params, (error, results) => {
+            if (error) {
+                return reject(error); 
+            }
+            resolve(results);
+        });
+    });
+}
+module.exports = { checkCredentials, getUsuarios, eliminarUsuario, agregarUsuario, modificarUsuario,
+    getProveedores, agregarProveedores,eliminarProveedores,modificarProveedores, getIDServicio, agregarServicioProveedor,
+     getNombreServicio, getIDServicioProveedor, getDisponibilidadServicio, getPrecioServicioProveedor, modificarServicioProveedor};
 

@@ -1,58 +1,68 @@
 * {
-    box-sizing: border-box; /* Añade esto al principio de tu CSS */
+    box-sizing: border-box;
+    /* Añade esto al principio de tu CSS */
 }
-.fondo{
+
+.fondo {
     background-color: rgb(193, 190, 190);
 }
 
-.navbar{
+.navbar {
     background-color: white;
     color: black;
 }
 
-.text{
+.text {
     padding-left: 15px;
     font-size: 25px;
 }
-.img{
+
+.img {
     padding-top: 125px;
 }
-.icon{
+
+.icon {
     padding-left: 20px;
 }
-.cerrar{
+
+.cerrar {
     font-size: 20px;
     padding-bottom: 5px;
     color: rgb(255, 255, 255);
-    border-color:rgb(0, 0, 0);
+    border-color: rgb(0, 0, 0);
     background: rgb(0, 0, 0);
     border-radius: 25px;
 }
-.tittle{
+
+.tittle {
     padding-top: 50px;
     font-size: 50px;
     font-weight: bold;
     text-align: center;
 }
-.botton_text{
+
+.botton_text {
     padding-top: 65px;
     padding-left: 180px;
 
 }
-.img_text{
+
+.img_text {
     padding-left: 190px;
 }
-.botton{
+
+.botton {
     font-size: 20px;
     padding-bottom: 10px;
     color: rgb(255, 255, 255);
-    border-color:rgb(15, 42, 133);
+    border-color: rgb(15, 42, 133);
     background: rgb(15, 42, 133);
     border-radius: 25px;
 }
 
 .f_Proveedores {
-    width: 80%; /* Cambia el ancho a 100% para que se ajuste al contenedor */
+    width: 80%;
+    /* Cambia el ancho a 100% para que se ajuste al contenedor */
     height: 36px;
     padding: 0 8px;
     border: 0;
@@ -75,7 +85,7 @@
 }
 
 #tablaProveedores {
-    width: 90%;
+    width: 100%;
     background-color: #ffffff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     table-layout: fixed;
@@ -88,7 +98,8 @@
     text-align: left;
     background-color: #f8f8f8;
     border-bottom: 2px solid #ddd;
-    width: 25%; /* Ajusta este valor según el número de columnas */
+    width: 25%;
+    /* Ajusta este valor según el número de columnas */
 }
 
 #tablaProveedores td {
@@ -99,13 +110,15 @@
 #tablaProveedores tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+
 .form_t {
     max-width: 100%;
-    overflow: hidden; 
+    overflow: hidden;
     padding-left: 100px;
     padding-top: 50px;
     font-weight: bold;
 }
+
 .btn-container {
     position: relative;
     overflow: visible;
@@ -113,28 +126,32 @@
 
 .btn-eliminar-proveedores {
     position: absolute;
-    top: 50%; /* Centrar verticalmente */
-    transform: translateY(-50%); /* Ajuste para centrar */
-    display: none; /* Inicialmente oculto */
-    z-index: 1; 
-    background-color: #f2f2f2; 
+    top: 50%;
+    /* Centrar verticalmente */
+    transform: translateY(-50%);
+    /* Ajuste para centrar */
+    display: none;
+    /* Inicialmente oculto */
+    z-index: 1;
+    background-color: #f2f2f2;
     color: #030303;
-    border: 1px solid #030303; 
+    border: 1px solid #030303;
     border-radius: 5px;
-    padding: 5px 10px; 
+    padding: 5px 10px;
 }
 
 #ProveedoresBody tr:hover .btn-eliminar-proveedores {
-    display: block; 
+    display: block;
 }
 
 #ProveedoresBody tr {
-    position: relative; 
+    position: relative;
 }
 
 #ProveedoresBody tr:hover {
     cursor: pointer;
 }
+
 .fondo_emergente {
     writing-mode: horizontal-tb;
     height: 546px;
@@ -158,6 +175,7 @@
     height: 100%;
     margin: 0;
 }
+
 .hero-body {
     position: absolute;
     top: 50%;
@@ -167,18 +185,26 @@
     font-weight: bold;
     vertical-align: text-top;
 }
+
 .modal {
-    position: fixed; /* Fijado para cubrir toda la pantalla */
-    z-index: 1000; /* Ya tienes el z-index correcto */
+    position: fixed;
+    /* Fijado para cubrir toda la pantalla */
+    z-index: 1000;
+    /* Ya tienes el z-index correcto */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
-    display: flex; /* Flexbox para centrar */
-    justify-content: center; /* Centrar horizontalmente */
-    align-items: center; /* Centrar verticalmente */
-}  
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Fondo semitransparente */
+    display: flex;
+    /* Flexbox para centrar */
+    justify-content: center;
+    /* Centrar horizontalmente */
+    align-items: center;
+    /* Centrar verticalmente */
+}
+
 .modal-content {
     background-color: #fff;
     padding: 20px;
@@ -199,12 +225,14 @@
     border: none;
 }
 
-.confirmar, .cancelar {
+.confirmar,
+.cancelar {
     margin: 10px;
     padding: 10px;
     cursor: pointer;
     border-radius: 5px;
 }
+
 .prov-form-container {
     max-width: 400px;
     margin: 50px auto;
@@ -213,9 +241,11 @@
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 .prov-form-title {
     text-align: center;
 }
+
 .prov-form-group {
     margin-bottom: 15px;
 }
@@ -224,6 +254,7 @@
     display: block;
     margin-bottom: 5px;
 }
+
 .prov-form-input,
 .prov-form-select {
     width: 100%;
@@ -268,14 +299,14 @@
 }
 
 .error-message {
-    position: fixed; 
+    position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #f44336; 
+    background-color: #f44336;
     color: white;
     padding: 15px;
-    border-radius: 5px; 
+    border-radius: 5px;
     z-index: 1000;
 }
 
@@ -291,4 +322,27 @@
     top: 70%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.servicios-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+      height: 100vh; 
+    max-width: 400px;
+    min-height: 400px;
+    box-sizing: border-box;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: auto;
+}
+
+.servicios-form-checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espacio entre servicios */
 }
