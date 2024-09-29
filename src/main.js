@@ -12,7 +12,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 let mainWindow, emergenteWindow, newProductWindow, AdmUserWindow, errorDuplicadoWindow, 
-ProvWindow, errorDuplicadoWindow2, ProvemergenteWindow, PrototipoWindow
+ProvWindow, errorDuplicadoWindow2, ProvemergenteWindow, PrototipoWindow,errorDuplicadoWindow3
 let userLogged = null;
 
 app.on('ready', () => {
@@ -330,8 +330,47 @@ ipcMain.on('cerrar-ventana-proveedor', async(e)=>{
     createWindowCoordi(userLogged);
 })
 
+/*PARTE DE PROTOTIPO CODE*/
 
+ipcMain.on('cerrar-ventana-formproto', async(e)=>{
+    await FormProtoWindow.close();
+    createPrototipo(userLogged);
+})
 
+ipcMain.on('cerrar-error3', async (e) => {
+    try {
+        const protoData = await database.getPrototipos();
+        createPrototipo(protoData, userLogged);
+        if (errorDuplicadoWindow3) { await errorDuplicadoWindow3.close(); }
+        if (FormProtoWindow) {await FormProtoWindow.close()};
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+function EmergenteErrorDuplicado3() {
+    errorDuplicadoWindow3 = new BrowserWindow({
+        width: 1050,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    errorDuplicadoWindow3.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Coordi/errorDuplicado3.html'),
+        protocol: 'file',
+        slashes: true,
+    }))
+
+    errorDuplicadoWindow3.setMenuBarVisibility(false);
+
+    errorDuplicadoWindow3.on('closed', () => {
+        errorDuplicadoWindow3 = null;
+    });
+}
+
+/*FPARTE DE PROTOTIPO CODE*/
 
 ipcMain.on('openCU', async (e, user) => {
     try {
@@ -507,6 +546,47 @@ function createPrototipo(prototipoData, user) {
     });
 }
 
+ipcMain.on('form-proto', (e) => {
+    PrototipoWindow.close();
+    EmergenteAgregarProto();
+})
+
+function EmergenteAgregarProto() {
+    FormProtoWindow = new BrowserWindow({
+        width: 1050,
+        height: 800,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    FormProtoWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Coordi/formPrototipo.html'),
+        protocol: 'file',
+        slashes: true,
+    }))
+    FormProtoWindow.setMenuBarVisibility(false);
+    FormProtoWindow.on('closed', () => {
+        FormProtoWindow = null;
+    });
+    FormProtoWindow.webContents.on('did-finish-load', () => {
+        FormProtoWindow.webContents.send('guardar-prototipo');
+    });
+}
+
+ipcMain.on('agregar-prototipo', async (e, newProto) => {
+    try {
+        console.log(newProto);
+        await database.agregarPrototipo(newProto);
+        const protoData = await database.getProtipo();
+        PrototipoWindow.close();
+        createPrototipo(protoData, userLogged);
+    } catch (error) {
+        console.error("Error al agregar prototipo:", error);
+        EmergenteErrorDuplicado3(); 
+    }
+});
+
 function EmergenteAgregarProveedor() {
     ProvemergenteWindow = new BrowserWindow({
         width: 1050,
@@ -668,6 +748,38 @@ ipcMain.on('open-consultar-prototipos', async (event, user)=>{
     }
 })
 
+ipcMain.on('open-consultar-prototiposEvalu', async (event, user)=>{
+    try{
+        const prototipoData = await database.getPrototipos();
+        createPrototipoEval(prototipoData, user);
+        newProductWindow.close();
+    }catch(error){
+        console.log(error);
+    }
+})
+
+function createPrototipoEval(prototipoData, user) {
+    PrototipoEvaluWindow = new BrowserWindow({
+        width: 1400,
+        height: 1600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    PrototipoEvaluWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Evalu/consultarPrototipoEvalu.html'),
+        protocol: 'file',
+        slashes: true,
+    }));
+    PrototipoEvaluWindow.setMenuBarVisibility(false);
+    PrototipoEvaluWindow.on('closed', () => {
+        PrototipoWindow = null;
+    });
+    PrototipoEvaluWindow.webContents.on('did-finish-load', () => {
+        PrototipoEvaluWindow.webContents.send('gestion-prototipos', prototipoData, user);
+    });
+}
 
 ipcMain.on('form-prov', (e) => {
     ProvWindow.close();
@@ -735,6 +847,7 @@ ipcMain.on('agregar-proveedor', async (e, newProv) => {
 
 ipcMain.on('servicios-dProveedor', async (e, Servicio_Proveedor) => {
     const { servicios, precio, disponibilidad } = Servicio_Proveedor;
+    console.log(servicios);
     const ID_Proveedor = Servicio_Proveedor.id_proveedor;
     try {
         if (servicios.includes("Alojamiento")) {
@@ -784,6 +897,23 @@ ipcMain.on('cerrar-ventana-confirmacionp', async (e) => {
     createProvUser(provData, userLogged);
     await emergenteWindow.close();
 });
+
+ipcMain.on('cerrar-ventana-evaluador', async(e)=>{
+    await PrototipoEvaluWindow.close();
+    createWindowEvalu(userLogged);
+})
+
+ipcMain.on('cerrar-error4', async (e) => {
+    try {
+        const provData = await database.getProveedores();
+        createProvUser(provData, userLogged);
+        if (errorDuplicadoWindow2) { await errorDuplicadoWindow2.close(); }
+        if (ProvemergenteWindow) {await ProvemergenteWindow.close()};
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 
 // FUNCION PARA MODIFICAR PROVEEDOR
 

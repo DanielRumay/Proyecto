@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ConsultarPrototipo</title>
+    <title>gestionPrototipos</title>
     <link rel="stylesheet" href="./bootstrap-5.0.2-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./coordi.css">
+    <link rel="stylesheet" href="./evalu.css">
 </head>
 
 <body class="fondo">
@@ -20,39 +20,29 @@
             </div>
             <div class="row">
                 <div class="navbar">
-                    <label class="text h1" id="cargo">Coordinador</label>
+                    <label class="text h1" id="cargo">Evaluador</label>
                     <img src="./img/user.ico" alt="Logo" width="60" height="40" class="icon d-inline-block align-text-top">
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Botón Volver alineado a la derecha -->
+    <!-- Botón Volver alineado a la derecha, separado -->
     <div class="container my-4">
         <div class="row">
             <div class="col-12 text-end">
-                <button type="button" id="volverPrototipo" class="cerrar button is-info is-rounded">Volver</button>
+                <button type="button" id="volverEvaluador" class="cerrar button is-info is-rounded">Volver</button>
             </div>
         </div>
 
-        <h2>Prototipos:</h2>
-
-        <div class="mb-3 row d-flex align-items-center justify-content-between">
-            <div class="col-md-5">
-                <label for="buscarPrototipo" class="form-label">Filtrar por nombre:</label>
+        <!-- Encabezado Prototipos y Botón Agregar en el mismo nivel -->
+        <div class="row my-3 align-items-center">
+            <div class="col-md-6">
+                <h2>Prototipos:</h2>
             </div>
         </div>
-        <div class="mb-3 row d-flex align-items-center justify-content-between">
-            <div class="col-md-5">
-                <input id="f-prototipo" type="text" class="form-control" id="buscarProveedor" placeholder="Inserte nombre del prototipo">
-            </div>
-            <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" id="BuscarPrototipo" class="botton me-4">Buscar</button>
-                <button type="submit" id="btnAgregarPrototipo" class="botton">Agregar</button>
-            </div>            
-        </div>
-    
 
+        <!-- Tabla de proveedores -->
         <div class="table-container">
             <table id="tablaPrototipo">
                 <thead>
@@ -62,6 +52,9 @@
                         <th>Destino</th>
                         <th>Proveedor</th>
                         <th>Servicio</th>
+                        <th>Aceptar</th>
+                        <th>Modificar</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody id="PrototiposBody">
@@ -71,7 +64,7 @@
     </div>
 
     <script src="./bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
-    <script src="./principal_coordi.js"></script>
+    <script src="./principal_evalu.js"></script>
 </body>
 
 </html>

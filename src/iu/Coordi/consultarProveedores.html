@@ -42,13 +42,21 @@
                 <label for="buscarProveedor" class="form-label">Filtrar por nombre:</label>
             </div>
             <div class="col-md-7">
-                <label for="selectDisponibilidad" class="form-label">Filtrar por disponibilidad:</label>
+                <label for="selectServicio" class="form-label">Filtrar por servicio:</label>
             </div>
         </div>
         <div class="mb-3 row d-flex align-items-center justify-content-between">
             <!-- Input de búsqueda con label -->
             <div class="col-md-5">
                 <input id="f-proveedor" type="text" class="form-control" id="buscarProveedor" placeholder="Inserte nombre de Proveedor">
+            </div>
+            <div class="col-md-5">
+                <select id="prototipo" name="prototipo" class="prov-form-select" required>
+                    <option id="todos">Todos</option>
+                    <option id="Alojamiento">Alojamiento</option>
+                    <option id="Transporte">Transporte</option>
+                    <option id="Turismo">Turismo</option>
+                </select>
             </div>
             <!-- Botones de búsqueda y agregar -->
             <div class="col-md-2 d-flex align-items-end">

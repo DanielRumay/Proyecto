@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electron & Mysql</title>
+    <link rel="stylesheet" href="./bootstrap-5.0.2-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./evalu.css">
+</head>
+
+<body class="fondo">
+    <nav class="navbar bg-body-tertiary">
+        <div class="container">
+            <div class="row">
+                <div class="navbar">
+                    <img src="./img/pixelcut-export.ico" alt="Logo" width="70" height="40"
+                        class="icon d-inline-block align-text-top">
+                    <span class="text navbar-brand mb-0 h1">EVERYWHERE TRAVEL</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="navbar">
+                    <label class="text h1" id="cargo"></label>
+                    <img src="./img/user.ico" alt="Logo" width="60" height="40"
+                        class="icon d-inline-block align-text-top">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="prov-form-container">
+        <h2 class="prov-form-title">Redacción de Prototipo Final</h2>
+        <button type="button" id="volver" class = 'btnv'>Volver</button>
+        
+        <!-- Selección de Prototipo -->
+        <div class="prov-form-group">
+            <label for="prototipo" class="prov-form-label">Seleccionar Prototipo:</label>
+            <select id="prototipo" name="prototipo" class="prov-form-select" required>
+                <option></option>
+            </select>
+        </div>
+
+        <!-- Campo de descripción con textarea -->
+        <div class="prov-form-group">
+            <label for="descripcion" class="prov-form-label">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" class="prov-form-textarea" rows="4" required></textarea>
+        </div>
+
+        <!-- Botón de registrar -->
+        <div class="prov-form-buttons">
+            <button type="submit" id="GuardarP">Registrar</button>
+        </div>
+
+        <div id="error-message" class="error-message" style="display: none;"></div>
+    </div>
+
+    <script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+    <script src=""></script>
+</body>
+
+</html>

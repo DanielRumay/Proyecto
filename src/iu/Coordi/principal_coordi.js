@@ -46,8 +46,31 @@ ipcRenderer.on('gestion-prototipos', (event,prototipos,user)=>{
         });
     };
     mostrarPrototipos(prototipo);
+
+    // Abrir el formulario de registro de proveedor
+    const btnagproto = document.querySelectorAll('#btnAgregarPrototipo');
+    btnagproto.forEach(btn => {
+        btn.addEventListener('click', e => {
+            ipcRenderer.send('form-proto');
+        });
+    });
+
 });
 
+ipcRenderer.on('guardar-prototipo', async (event) => {
+    const form = document.getElementById('protoForm');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const newProto = {
+            Nombre: document.querySelector('#namep').value,
+            ID_Destino: document.querySelector('#destino').value, 
+            usuario_ID_Usuario: userLogged.id
+        };
+        ipcRenderer.send('agregar-prototipo', newProto);
+    });
+});
 
 let proveeM = [];
 
@@ -125,17 +148,20 @@ ipcRenderer.on('gestion-proveedor', (event, proveedores, user) => {
     };
     mostrarProveedores(proveeM);
     // ---BUSCAR PROVEEDORES---
-    const btnBuscarp = document.querySelector('#Buscarp');
-    btnBuscarp.addEventListener('click', () => {
-        const provInput = document.querySelector('#f-proveedor').value; // Obtener el valor del campo de búsqueda de proveedor
+const btnBuscarp = document.querySelector('#Buscarp');
+btnBuscarp.addEventListener('click', () => {
+    const provInput = document.querySelector('#f-proveedor').value; // Obtener el valor del campo de búsqueda de proveedor
+    const servicioSeleccionado = document.querySelector('#prototipo').value; // Obtener el valor del filtro por servicio
 
-        const filtropro = proveedores.filter(proveedor => {
-            const provMatches = provInput === '' || proveedor.Nombre === provInput; // Verifica si el nombre coincide
-            return provMatches
-        });
+    const filtropro = proveedores.filter(proveedor => {
+        const provMatches = provInput === '' || proveedor.Nombre.toLowerCase().includes(provInput.toLowerCase()); // Verifica si el nombre coincide (insensible a mayúsculas/minúsculas)
+        const servicioMatches = servicioSeleccionado === 'Todos' || proveedor.Servicio === servicioSeleccionado; // Verifica si el servicio coincide o si seleccionó 'Todos'
 
-        mostrarProveedores(filtropro); // Muestra los proveedores filtrados
+        return provMatches && servicioMatches; // Solo retorna si ambos filtros coinciden
     });
+
+    mostrarProveedores(filtropro); // Muestra los proveedores filtrados
+});
 
     // Salir de la interfaz
     const btn2 = document.querySelectorAll('#Salir');
@@ -267,14 +293,7 @@ ipcRenderer.on('solicitar-confirmacionp', (e) => {
 });
 
 
-
 // NUEVO
-
-
-
-
-
-
 
 /// BOTONES DE VOLVER
 const btns = document.querySelectorAll('#volver');
@@ -297,3 +316,10 @@ btp.forEach(btn =>{
         ipcRenderer.send('cerrar-ventana-prototipo');
     })
 })
+
+const btnp = document.querySelectorAll('#volverForm');
+btnp.forEach(btn => {
+    btn.addEventListener('click', e => {
+        ipcRenderer.send('guardar');
+    })
+});
