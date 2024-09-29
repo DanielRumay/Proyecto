@@ -24,6 +24,34 @@ ipcRenderer.on('gestion-prototipos', (event,prototipos,user)=>{
     prototipo = prototipos;
     const tablaBody = document.querySelector('#PrototiposBody');
     tablaBody.innerHTML = '';
+
+    const agruparPrototipos = (prototipos) => {
+        const agrupados = {};
+        
+        prototipos.forEach(prototipo => {
+            if (!agrupados[prototipo.ID_Prototipo]) {
+                agrupados[prototipo.ID_Prototipo] = {
+                    ...prototipo,
+                    Destinos: new Set(),
+                    Proveedores: new Set(),
+                    Servicios: new Set(),
+                };
+            }
+            
+            agrupados[prototipo.ID_Prototipo].Destinos.add(prototipo.Nombre_Destino || 'No disponible');
+            agrupados[prototipo.ID_Prototipo].Proveedores.add(prototipo.Proveedores || 'No disponible');
+            agrupados[prototipo.ID_Prototipo].Servicios.add(prototipo.Servicios || 'No disponible');
+        });
+        
+        return Object.values(agrupados).map(prot => ({
+            ...prot,
+            Destinos: Array.from(prot.Destinos).join(', '),
+            Proveedores: Array.from(prot.Proveedores).join(', '),
+            Servicios: Array.from(prot.Servicios).join(', '),
+        }));
+    };
+
+
     const mostrarPrototipos = (prototiposParaMostrar) => {
         console.log(prototiposParaMostrar);
         tablaBody.innerHTML = '';
@@ -34,7 +62,7 @@ ipcRenderer.on('gestion-prototipos', (event,prototipos,user)=>{
             fila.innerHTML = `
                 <td>${prototipo.ID_Prototipo}</td>
                 <td>${prototipo.Nombre_Prototipo}</td>
-                <td>${prototipo.Nombre_Destino || 'No disponible'}</td>
+                <td>${prototipo.Destinos || 'No disponible'}</td>
                 <td>${prototipo.Proveedores || 'No disponible'}</td>
                 <td>${prototipo.Servicios || 'No disponible'}</td>
                 <td class="btn-container">
@@ -50,7 +78,8 @@ ipcRenderer.on('gestion-prototipos', (event,prototipos,user)=>{
             tablaBody.appendChild(fila);
         });
     };
-    mostrarPrototipos(prototipo);
+    const prototiposAgrupados = agruparPrototipos(prototipo);
+    mostrarPrototipos(prototiposAgrupados);
 });
 
 /*const btns = document.querySelectorAll('#volver');
