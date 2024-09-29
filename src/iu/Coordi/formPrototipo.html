@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Prototipo</title>
+    <link rel="stylesheet" href="./bootstrap-5.0.2-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="coordi.css">
+</head>
+<body class="fondo">
+    <div class="prov-form-container">
+        <h2 class="prov-form-title">Formulario de Prototipo</h2>
+        <button type="button" id="volver" class="btn-volver">Volver</button>
+        <form id="provForm" class="prov-form">
+            <div class="prov-form-group">
+                <label for="namep" class="prov-form-label">Nombre de prototipo:</label>
+                <input type="text" id="namep" name="namep" class="prov-form-input" required>
+            </div>
+
+            <div class="prov-form-group">
+                <label for="proveedor" class="prov-form-label">Proveedor:</label>
+                <select id="proveedor" name="proveedor" class="prov-form-input" required>
+                    <option value="" disabled selected>Selecciona un proveedor</option>
+                    <!-- Aquí se llenarán dinámicamente las opciones desde la base de datos -->
+                </select>
+            </div>
+
+            <div class="prov-form-group">
+                <label for="destino" class="prov-form-label">Destino:</label>
+                <select id="destino" name="destino" class="prov-form-input" required>
+                    <option value="" disabled selected>Selecciona un destino</option>
+                    <!-- Aquí se llenarán dinámicamente las opciones desde la base de datos -->
+                </select>
+            </div>
+
+            <div class="prov-form-buttons">
+                <button type="submit" id="GuardarP">Registrar</button>
+            </div>
+        </form>
+        <div id="error-message" class="error-message" style="display: none;"></div>
+    </div>
+</body>
+</html>

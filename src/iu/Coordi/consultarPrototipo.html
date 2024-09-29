@@ -31,49 +31,40 @@
     <div class="container my-4">
         <div class="row">
             <div class="col-12 text-end">
-                <button type="button" id="volverProveedor" class="cerrar button is-info is-rounded">Volver</button>
+                <button type="button" id="volverPrototipo" class="cerrar button is-info is-rounded">Volver</button>
             </div>
         </div>
 
-        <h2>Proveedores:</h2>
+        <h2>Prototipos:</h2>
 
         <div class="mb-3 row d-flex align-items-center justify-content-between">
             <div class="col-md-5">
-                <label for="buscarProveedor" class="form-label">Filtrar por nombre:</label>
-            </div>
-            <div class="col-md-7">
-                <label for="selectDisponibilidad" class="form-label">Filtrar por disponibilidad:</label>
+                <label for="buscarPrototipo" class="form-label">Filtrar por nombre:</label>
             </div>
         </div>
         <div class="mb-3 row d-flex align-items-center justify-content-between">
-            <!-- Input de búsqueda con label -->
             <div class="col-md-5">
-                <input id="f-proveedor" type="text" class="form-control" id="buscarProveedor" placeholder="Inserte nombre de Proveedor">
+                <input id="f-prototipo" type="text" class="form-control" id="buscarProveedor" placeholder="Inserte nombre del prototipo">
             </div>
-            <!-- Botones de búsqueda y agregar -->
             <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" id="Buscarp" class="botton me-4">Buscar</button>
-                <button type="submit" id="btnAgregar" class="botton">Agregar</button>
+                <button type="submit" id="BuscarPrototipo" class="botton me-4">Buscar</button>
+                <button type="submit" id="btnAgregarPrototipo" class="botton">Agregar</button>
             </div>            
         </div>
     
-        <!-- Tabla de proveedores -->
+
         <div class="table-container">
-            <table id="tablaProveedores">
+            <table id="tablaPrototipo">
                 <thead>
                     <tr>
-                        <th>ID_Proveedor</th>
-                        <th>Nombre</th>
-                        <th>Correo</th>
-                        <th>Servicios</th>
-                        <th>Disponibilidad</th>
-                        <th>Precios</th>
-                        <th>Modificar</th>
-                        <th>Ver Servicios</th>
-                        <th>Eliminar</th>
+                        <th>ID_Prototipo</th>
+                        <th>Nombre del Prototipo</th>
+                        <th>Destino</th>
+                        <th>Nombre Proveedor</th>
+                        <th>Servicio</th>
                     </tr>
                 </thead>
-                <tbody id="ProveedoresBody">
+                <tbody id="PrototiposBody">
                 </tbody>
             </table>
         </div>

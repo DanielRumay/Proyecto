@@ -93,6 +93,7 @@
     border-collapse: collapse;
 }
 
+
 #tablaProveedores th {
     padding: 8px 12px;
     text-align: left;
@@ -107,9 +108,38 @@
     border-bottom: 1px solid #ddd;
 }
 
-#tablaProveedores tbody tr:nth-child(even) {
+#tablaPrototipo tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+
+#tablaPrototipo {
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    table-layout: fixed;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+
+
+#tablaPrototipo th {
+    padding: 8px 12px;
+    text-align: left;
+    background-color: #f8f8f8;
+    border-bottom: 2px solid #ddd;
+    width: 25%;
+    /* Ajusta este valor según el número de columnas */
+}
+
+#tablaPrototipo td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+#tablaPrototipo tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
 
 .form_t {
     max-width: 100%;

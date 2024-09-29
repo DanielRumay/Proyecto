@@ -121,6 +121,7 @@
 #tablaUsuarios tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+
 .form_t {
     max-width: 100%;
     overflow: hidden; 

@@ -11,7 +11,8 @@ if (process.env.NODE_ENV !== 'production') {
     })
 }
 
-let mainWindow, emergenteWindow, newProductWindow, AdmUserWindow, errorDuplicadoWindow, ProvWindow, errorDuplicadoWindow2, ProvemergenteWindow
+let mainWindow, emergenteWindow, newProductWindow, AdmUserWindow, errorDuplicadoWindow, 
+ProvWindow, errorDuplicadoWindow2, ProvemergenteWindow, PrototipoWindow
 let userLogged = null;
 
 app.on('ready', () => {
@@ -313,10 +314,22 @@ ipcMain.on('cerrar-error', async (e) => {
     }
 })
 
+
 ipcMain.on('form-actualizar-user', async (e, usuario) => {
     await EmergenteModificarUsuario(usuario);
     await AdmUserWindow.close();
 });
+
+ipcMain.on('cerrar-ventana-prototipo', async(e)=>{
+    await PrototipoWindow.close();
+    createWindowCoordi(userLogged);
+})
+
+ipcMain.on('cerrar-ventana-proveedor', async(e)=>{
+    await ProvWindow.close();
+    createWindowCoordi(userLogged);
+})
+
 
 
 
@@ -471,6 +484,29 @@ function createProvUser(provData, user) {
     });
 }
 
+function createPrototipo(prototipoData, user) {
+    PrototipoWindow = new BrowserWindow({
+        width: 1400,
+        height: 1600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    PrototipoWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Coordi/consultarPrototipo.html'),
+        protocol: 'file',
+        slashes: true,
+    }));
+    PrototipoWindow.setMenuBarVisibility(false);
+    PrototipoWindow.on('closed', () => {
+        PrototipoWindow = null;
+    });
+     PrototipoWindow.webContents.on('did-finish-load', () => {
+         PrototipoWindow.webContents.send('gestion-prototipos', prototipoData, user);
+    });
+}
+
 function EmergenteAgregarProveedor() {
     ProvemergenteWindow = new BrowserWindow({
         width: 1050,
@@ -622,12 +658,15 @@ ipcMain.on('open-consultar-proveedores', async (event, user) => {
     }
 });
 
-ipcMain.on('cerrar-consultar-proveedores', (event, user) => {
-    if (ProvWindow) {
-        ProvWindow.close();
+ipcMain.on('open-consultar-prototipos', async (event, user)=>{
+    try{
+        const prototipoData = await database.getPrototipos();
+        createPrototipo(prototipoData, user);
+        newProductWindow.close();
+    }catch(error){
+        console.log(error);
     }
-    createWindowCoordi(user);
-});
+})
 
 
 ipcMain.on('form-prov', (e) => {
@@ -731,7 +770,7 @@ ipcMain.on('cerrar-error2', async (e) => {
         const provData = await database.getProveedores();
         createProvUser(provData, userLogged);
         if (errorDuplicadoWindow2) { await errorDuplicadoWindow2.close(); }
-        await ProvemergenteWindow.close();
+        if (ProvemergenteWindow) {await ProvemergenteWindow.close()};
     } catch (error) {
         console.log(error);
     }

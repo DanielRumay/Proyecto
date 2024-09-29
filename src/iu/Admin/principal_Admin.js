@@ -34,7 +34,6 @@ ipcRenderer.on('datos-usuarios', (event, usuarios, user) => {
         tablaBody.innerHTML = '';
 
         usuariosParaMostrar.forEach(usuario => {
-            console.log(usuario);
             const fila = document.createElement('tr');
             fila.innerHTML = `
                 <td>${usuario.NombreUsu}</td>

@@ -16,14 +16,38 @@ ipcRenderer.on('check-credentials', (e, userData) => {
     btnConsultarProveedor.addEventListener('click', e => {
         ipcRenderer.send('open-consultar-proveedores', userData);
     });
+    const btnConsultarPrototipo = document.querySelector('#btnConsultarPrototipo');
+    btnConsultarPrototipo.addEventListener('click', e =>{
+        ipcRenderer.send('open-consultar-prototipos', userData);
+    })
 });
 
-// ipcRenderer.on('gestion-proveedor', (e, userData) => {
-//     const btnVolver = document.querySelector('#btnVolver');
-//     btnVolver.addEventListener('click', e => {
-//         ipcRenderer.send('cerrar-consultar-proveedores', userData);
-//     });
-// });
+let prototipo = [];
+
+ipcRenderer.on('gestion-prototipos', (event,prototipos,user)=>{
+    prototipo = prototipos;
+    const tablaBody = document.querySelector('#PrototiposBody');
+    tablaBody.innerHTML = '';
+    const mostrarPrototipos = (prototiposParaMostrar) => {
+        console.log(prototiposParaMostrar);
+        tablaBody.innerHTML = '';
+    
+        prototiposParaMostrar.forEach(prototipo => {
+            console.log(prototipo); // Muestra cada prototipo en la consola
+            const fila = document.createElement('tr');
+            fila.innerHTML = `
+                <td>${prototipo.ID_Prototipo}</td>
+                <td>${prototipo.Nombre_Prototipo}</td>
+                <td>${prototipo.Nombre_Destino || 'No disponible'}</td>
+                <td>${prototipo.Proveedores || 'No disponible'}</td>
+                <td>${prototipo.Servicios || 'No disponible'}</td>
+            `;
+            tablaBody.appendChild(fila);
+        });
+    };
+    mostrarPrototipos(prototipo);
+});
+
 
 let proveeM = [];
 
@@ -242,9 +266,34 @@ ipcRenderer.on('solicitar-confirmacionp', (e) => {
     });
 });
 
+
+
+// NUEVO
+
+
+
+
+
+
+
+/// BOTONES DE VOLVER
 const btns = document.querySelectorAll('#volver');
 btns.forEach(btn => {
     btn.addEventListener('click', e => {
         ipcRenderer.send('cerrar-error2');
     })
 });
+
+const btv = document.querySelectorAll('#volverProveedor');
+btv.forEach(btn =>{
+    btn.addEventListener('click', e =>{
+        ipcRenderer.send('cerrar-ventana-proveedor');
+    })
+})
+
+const btp = document.querySelectorAll('#volverPrototipo');
+btp.forEach(btn =>{
+    btn.addEventListener('click', e =>{
+        ipcRenderer.send('cerrar-ventana-prototipo');
+    })
+})
