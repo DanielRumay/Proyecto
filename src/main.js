@@ -14,6 +14,7 @@ let emergenteWindow
 let newProductWindow
 let AdmUserWindow
 let ProvWindow
+let PrototipeWindow
 
 
 app.on('ready', () => {
@@ -271,6 +272,28 @@ function EmergenteModificarUsuario(usuario) {
     });
 }
 
+function createProtot(userData, user){
+    PrototipeWindow = new BrowserWindow({
+        width: 1400,
+        height: 1600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    PrototipeWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Evalu/paquetefinal.html'),
+        protocol: 'file',
+        slashes: true,
+    }))
+    PrototipeWindow.setMenuBarVisibility(false);
+    PrototipeWindow.on('closed', () => {
+        AdmUserWindow = null;
+    });
+    PrototipeWindow.webContents.on('did-finish-load', () => {
+        PrototipeWindow.webContents.send('datos-Prototipo', userData, user);
+    });
+}
 
 //----------------------IPC MAIN----------------------
 
@@ -312,6 +335,10 @@ ipcMain.on('cerrar-ventana-confirmacion', (e)  => {
 ipcMain.on('close_funcion', (e, userData)  => {
     AdmUserWindow.close();
     createWindowAdmin(userData);
+});
+ipcMain.on('close_Prototipe', (e, userData)  => {
+    PrototipeWindow.close();
+    createWindowEvalu(userData);
 });
 ipcMain.on('openCU', async (e, user) => {
     try {
@@ -369,7 +396,17 @@ ipcMain.on('usuario-modificado', async(e,newUser, userActual)=>{
     }
 })
 
-
+ipcMain.on('openPro', async (e, user) => {
+    try {
+        const userData = await database.getPrototipo();
+        if (newProductWindow) {
+            newProductWindow.close();
+        }
+        createProtot(userData, user);
+    } catch (error) {
+        console.error("Error al obtener usuarios:", error);
+    }
+});
 
 ipcMain.on('check-credentials', async (event, confirmUser) => {
     const { user, password } = confirmUser;

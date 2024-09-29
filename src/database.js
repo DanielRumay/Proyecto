@@ -81,5 +81,18 @@ function modificarUsuario(userModificado, userActual) {
     })
 }
 
+function getPrototipo() {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT Nombre FROM prototipo';
 
-module.exports = { checkCredentials, getUsuarios, eliminarUsuario, agregarUsuario, modificarUsuario };
+        connection.query(query, (error, results) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(results || []);
+        });
+    });
+}
+
+
+module.exports = { checkCredentials, getUsuarios, eliminarUsuario, agregarUsuario, modificarUsuario, getPrototipo};

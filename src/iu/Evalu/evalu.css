@@ -47,3 +47,15 @@
     background: rgb(15, 42, 133);
     border-radius: 30px;
 }
+.sub_tittle{
+    padding-top: 30px;
+    font-size: 30px;
+    font-weight: bold;
+}
+.CARTA{
+    padding-top: 20px;
+}
+.form-control{
+    width: 63rem;
+    height: 24rem;
+}
