@@ -29,14 +29,13 @@ ipcRenderer.on('datos-Prototipo', (e, userData, user) => {
 
     const mostrarPrototipo = (prototipos) => {
         const listaPrototipo = document.querySelector('#prototipo');
-        listaPrototipo.innerHTML = '';  
+        listaPrototipo.innerHTML = '';
 
         prototipos.forEach(prototipo => {
             console.log("Agregando prototipo:", prototipo);
-            const itemLista = document.createElement('li');
-            itemLista.innerHTML = `
-                <a class="dropdown-item" href="#">${prototipo.Nombre}</a>
-            `;
+            const itemLista = document.createElement('option');
+            itemLista.value = prototipo.ID_Prototipo;
+            itemLista.textContent = prototipo.Nombre;
             listaPrototipo.appendChild(itemLista);
         });
     };
@@ -48,5 +47,32 @@ ipcRenderer.on('datos-Prototipo', (e, userData, user) => {
         btn.addEventListener('click', () => {
             ipcRenderer.send('close_Prototipe', user);
         });
+    });
+    const btnRegistrar = document.querySelector('#REGISTRAR');
+    btnRegistrar.addEventListener('click', () => {
+        const descripcion = document.querySelector('#descripcion');
+        const prototipoId = document.querySelector('#prototipo');
+
+        const nuevoPaquete = {
+            ID_Prototipo: prototipoId.value,
+            Descripcion: descripcion.value
+        };
+
+        ipcRenderer.send('confirmar-agregar-paquete-final', nuevoPaquete, user);
+    });
+});
+
+ipcRenderer.on('confirmacion-PF', (e,nuevoPaquete, user) => {
+    const btnSI = document.querySelectorAll('#confirmar');
+    btnSI.forEach(btn => {
+        btn.addEventListener('click', e => {
+            ipcRenderer.send('creacion-PF',nuevoPaquete, user);
+        })
+    });
+    const btnNO = document.querySelectorAll('#cancelar');
+    btnNO.forEach(btn => {
+        btn.addEventListener('click', e => {
+            ipcRenderer.send('cerrar-confirmacion-PF');
+        })
     });
 });

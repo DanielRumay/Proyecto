@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paquete Final</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./bootstrap-5.0.2-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./evalu.css">
 </head>
@@ -48,27 +47,25 @@
                                     <div class="col-4">
                                         <h5 class="card-title">Seleccionar prototipo:</h5>
                                     </div>
-                                    <div class="dropdown">
-                                        <button class="btn btn-secondary dropdown-toggle" type="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                            Selecciona un prototipo
-                                        </button>
-                                        <ul class="dropdown-menu" id="prototipo">
-                                        </ul>
+                                    <div class="prov-form-group col-4">
+                                        <label for="prototipo" class="prov-form-label">Seleccionar Prototipo:</label>
+                                        <select id="prototipo" name="prototipo" class="prov-form-select" required>
+                                        </select>
                                     </div>
                                     <h5 class="card-title">Descripcion</h5>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    <textarea class="form-control" id="descripcion" rows="3"></textarea>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="regisbton">
+                        <button type="submit" id="REGISTRAR" class="registrar button is-info is-rounded">Registrar</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
     <script src="./principal_evalu.js"></script>
 </body>

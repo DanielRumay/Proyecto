@@ -14,7 +14,10 @@
 .img{
     padding-top: 125px;
 }
-.icon{
+.iconp{
+    padding-left: 40px;
+}
+.icon {
     padding-left: 20px;
 }
 .cerrar{
@@ -33,8 +36,7 @@
 }
 .botton_text{
     padding-top: 80px;
-    padding-left: 180px;
-
+    padding-left: 200px;
 }
 .img_text{
     padding-left: 210px;
@@ -42,10 +44,12 @@
 .botton{
     font-size: 25px;
     padding-bottom: 9px;
+    padding-left: 15px;
+    padding-right: 15px;
     color: rgb(255, 255, 255);
     border-color:rgb(15, 42, 133);
     background: rgb(15, 42, 133);
-    border-radius: 30px;
+    border-radius: 200px;
 }
 .sub_tittle{
     padding-top: 30px;
@@ -58,4 +62,35 @@
 .form-control{
     width: 63rem;
     height: 24rem;
+}
+.regisbton{
+    padding-top: 20px;
+}
+.registrar{
+    font-size: 20px;
+    padding-bottom: 5px;
+    color: rgb(255, 255, 255);
+    border-color:rgb(15, 42, 133);
+    background: rgb(15, 42, 133);
+    border-radius: 25px;
+    float: right;
+}
+.modal {
+    position: fixed; /* Fijado para cubrir toda la pantalla */
+    z-index: 1000; /* Ya tienes el z-index correcto */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    display: flex; /* Flexbox para centrar */
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+}  
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+    text-align: center;
 }

@@ -81,9 +81,28 @@ function modificarUsuario(userModificado, userActual) {
     })
 }
 
-function getPrototipo() {
+function agregarPaqueFinal(paquete) {
     return new Promise((resolve, reject) => {
-        const query = 'SELECT Nombre FROM prototipo';
+        const query = 'INSERT INTO paquetefinal(ID_Prototipo, Descripcion) VALUES(?, ?)';
+        const { ID_Prototipo, Descripcion } = paquete;
+
+        connection.query(query, [ID_Prototipo, Descripcion], (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(result || []);
+        });
+    });
+}
+
+function getPrototipoDisponibles() {
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT p.ID_Prototipo, p.Nombre 
+            FROM prototipo p 
+            LEFT JOIN paquetefinal pf ON p.ID_Prototipo = pf.ID_Prototipo 
+            WHERE pf.ID_Prototipo IS NULL;
+        `;
 
         connection.query(query, (error, results) => {
             if (error) {
@@ -95,4 +114,4 @@ function getPrototipo() {
 }
 
 
-module.exports = { checkCredentials, getUsuarios, eliminarUsuario, agregarUsuario, modificarUsuario, getPrototipo};
+module.exports = { checkCredentials, getUsuarios, eliminarUsuario, agregarUsuario, modificarUsuario, agregarPaqueFinal, getPrototipoDisponibles};

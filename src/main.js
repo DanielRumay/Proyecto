@@ -295,6 +295,29 @@ function createProtot(userData, user){
     });
 }
 
+function EmergentePF(nuevoPaquete, user){
+    emergenteWindow = new BrowserWindow({
+        width: 1050,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    emergenteWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'iu/Evalu/confirmacionPF.html'),
+        protocol: 'file',
+        slashes: true,
+    }))
+    emergenteWindow.setMenuBarVisibility(false);
+    emergenteWindow.on('closed', () => {
+        emergenteWindow = null;
+    });
+    emergenteWindow.webContents.on('did-finish-load', () => {
+        emergenteWindow.webContents.send('confirmacion-PF',nuevoPaquete, user);
+    });
+}
+
 //----------------------IPC MAIN----------------------
 
 ipcMain.on('close', (e)  => {
@@ -330,6 +353,9 @@ ipcMain.on('close_confirmacion', (e)  => {
     createMainWindow();
 });
 ipcMain.on('cerrar-ventana-confirmacion', (e)  => {
+    emergenteWindow.close();
+});
+ipcMain.on('cerrar-confirmacion-PF', (e)  => {
     emergenteWindow.close();
 });
 ipcMain.on('close_funcion', (e, userData)  => {
@@ -398,13 +424,35 @@ ipcMain.on('usuario-modificado', async(e,newUser, userActual)=>{
 
 ipcMain.on('openPro', async (e, user) => {
     try {
-        const userData = await database.getPrototipo();
+        const userData = await database.getPrototipoDisponibles();
         if (newProductWindow) {
             newProductWindow.close();
         }
         createProtot(userData, user);
     } catch (error) {
         console.error("Error al obtener usuarios:", error);
+    }
+});
+
+ipcMain.on('confirmar-agregar-paquete-final', (e, nuevoPaquete, user) => {
+    try {
+        EmergentePF(nuevoPaquete,user);
+    } catch (error) {
+        console.error("Error al agregar un nuevo paquete final:", error);
+    }
+});
+ipcMain.on('creacion-PF', async (e, nuevoPaquete, user) => {
+    try {
+        await database.agregarPaqueFinal(nuevoPaquete);
+        if (emergenteWindow) {
+            emergenteWindow.close();
+        }
+        if (PrototipeWindow) {
+            PrototipeWindow.close();
+        }
+        createWindowEvalu(user);
+    } catch (error) {
+        console.error("Error al agregar un nuevo paquete final:", error);
     }
 });
 
